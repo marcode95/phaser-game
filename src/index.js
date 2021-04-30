@@ -42,6 +42,14 @@ var scoreText;
 
 var game = new Phaser.Game(config);
 
+const createLoop = (scene, count, texture, scrollFactor) => {
+  let x = 0;
+  for (let i = 0; i < count; ++i) {
+    const m = scene.add.image(x, 337.5, texture).setScrollFactor(scrollFactor);
+    x += m.width;
+  }
+}
+
 function preload ()
 {
   this.load.image('sky', sky);
@@ -63,16 +71,16 @@ function preload ()
 function create ()
 {
   //  A simple background for our game
-  this.add.image(600, 337.5, 'sky');
-  this.add.image(600, 337.5, 'trees4');
-  this.add.image(600, 337.5, 'trees2');
-  this.add.image(600, 337.5, 'trees1');
-  this.add.image(600, 337.5, 'trees3');
-  this.add.image(600, 337.5, 'stones');
-  this.add.image(600, 337.5, 'glowworm4');
-  this.add.image(600, 337.5, 'glowworm1');
-  this.add.image(600, 337.5, 'glowworm2');
-  this.add.image(600, 375.5, 'glowworm3');
+  this.add.image(600, 337.5, 'sky').setScrollFactor(0);
+  createLoop(this, 4, 'trees4', 0.2);
+  createLoop(this, 4, 'trees2', 0.4);
+  createLoop(this, 4, 'trees1', 0.6);
+  createLoop(this, 4, 'trees3', 0.8);
+  createLoop(this, 4, 'stones', 1);
+  createLoop(this, 4, 'glowworm4', 1);
+  createLoop(this, 4, 'glowworm1', 1);
+  createLoop(this, 4, 'glowworm2', 1);
+  createLoop(this, 4, 'glowworm3', 1);
 
   //  The platforms group contains the ground and the 2 ledges we can jump on
   platforms = this.physics.add.staticGroup();
@@ -145,10 +153,13 @@ function create ()
   this.physics.add.overlap(player, stars, collectStar, null, this);
 
   this.physics.add.collider(player, bombs, hitBomb, null, this);
+
+  this.cameras.main.setBounds(0, 0, 3000);
 }
 
-function update ()
-{
+function update () {
+  const cam = this.cameras.main;
+
   if (gameOver)
   {
       return;
@@ -157,14 +168,16 @@ function update ()
   if (cursors.left.isDown)
   {
       player.setVelocityX(-160);
-
       player.anims.play('left', true);
+
+      cam.scrollX -= 2;
   }
   else if (cursors.right.isDown)
   {
       player.setVelocityX(160);
-
       player.anims.play('right', true);
+
+      cam.scrollX += 2;
   }
   else
   {
