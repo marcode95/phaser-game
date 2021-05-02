@@ -8,7 +8,11 @@ import glowworm1 from './assets/glowworm1.png';
 import glowworm2 from './assets/glowworm2.png';
 import glowworm3 from './assets/glowworm3.png';
 import glowworm4 from './assets/glowworm4.png';
-import platform from './assets/platform.png';
+import ground from './assets/ground.png';
+import knightStanding from './assets/knightStanding.png';
+import knightRunningRight from './assets/knightRunningRight.png';
+import knightRunningLeft from './assets/knightRunningLeft.png';
+import knightJumping from './assets/knightJumping.png';
 import dude from './assets/dude.png';
 import bomb from './assets/bomb.png';
 import star from './assets/star.png';
@@ -50,6 +54,14 @@ const createLoop = (scene, count, texture, scrollFactor) => {
   }
 }
 
+const createGround = (start, height, texture, scale, count) => {
+  let x = 0;
+  for (let i = 0; i < count; ++i) {
+    const m = platforms.create(start + x, height, texture).setScale(scale).refreshBody();
+    x += m.width;
+  }
+}
+
 function preload ()
 {
   this.load.image('sky', sky);
@@ -62,10 +74,14 @@ function preload ()
   this.load.image('glowworm2', glowworm2);
   this.load.image('glowworm3', glowworm3);
   this.load.image('glowworm4', glowworm4);
-  this.load.image('ground', platform);
+  this.load.image('ground', ground);
   this.load.image('star', star);
   this.load.image('bomb', bomb);
   this.load.spritesheet('dude', dude, { frameWidth: 32, frameHeight: 48 });
+  this.load.spritesheet('knightStanding', knightStanding, { frameWidth: 64, frameHeight: 45 });
+  this.load.spritesheet('knightRunningRight', knightRunningRight, { frameWidth: 96, frameHeight: 45 });
+  this.load.spritesheet('knightRunningLeft', knightRunningLeft, { frameWidth: 96, frameHeight: 45 });
+  this.load.spritesheet('knightJumping', knightJumping, { frameWidth: 96, frameHeight: 45 });
 }
 
 function create ()
@@ -78,16 +94,18 @@ function create ()
   createLoop(this, 4, 'trees3', 0.8);
   createLoop(this, 4, 'stones', 1);
   createLoop(this, 4, 'glowworm4', 1);
-  createLoop(this, 4, 'glowworm1', 1);
-  createLoop(this, 4, 'glowworm2', 1);
-  createLoop(this, 4, 'glowworm3', 1);
+  createLoop(this, 4, 'glowworm1', 1.25);
+  createLoop(this, 4, 'glowworm2', 1.25);
+  createLoop(this, 4, 'glowworm3', 1.25);
 
   //  The platforms group contains the ground and the 2 ledges we can jump on
   platforms = this.physics.add.staticGroup();
 
   //  Here we create the ground.
   //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-//   platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+  // platforms.create(32, 670, 'ground').setScale(1.5).refreshBody();
+  // platforms.create(96, 670, 'ground').setScale(1.5).refreshBody();
+  createGround(32, 670, 'ground', 1.5, 15);
 
   //  Now let's create some ledges
 //   platforms.create(600, 400, 'ground');
@@ -104,20 +122,21 @@ function create ()
   //  Our player animations, turning, walking left and walking right.
   this.anims.create({
       key: 'left',
-      frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+      frames: this.anims.generateFrameNumbers('knightRunningLeft', { start: 0, end: 7 }),
       frameRate: 10,
       repeat: -1
   });
 
   this.anims.create({
       key: 'turn',
-      frames: [ { key: 'dude', frame: 4 } ],
-      frameRate: 20
+      frames: this.anims.generateFrameNumbers('knightStanding', { start: 0, end: 14 }),
+      frameRate: 10,
+      repeat: -1
   });
 
   this.anims.create({
       key: 'right',
-      frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+      frames: this.anims.generateFrameNumbers('knightRunningRight', { start: 0, end: 7 }),
       frameRate: 10,
       repeat: -1
   });
