@@ -65,7 +65,7 @@ var cursors;
 var score = 0;
 var gameOver = false;
 var scoreText;
-
+let invincible = false;
 let superJump = false;
 
 
@@ -196,7 +196,7 @@ function create ()
     setXY: { x: 300, y: 0, stepX: 70 }
   })
 
-  wolves.setVelocityX(-10);
+  wolves.setVelocityX(0);
   //  JUMP ITEM
   jumpItems = this.physics.add.group({
     key: 'jumpItem',
@@ -235,6 +235,8 @@ function create ()
   this.physics.add.collider(player, bombs, hitBomb, null, this);
 
   this.physics.add.collider(player, jumpItems, activateSuperJump, null, this);
+
+  this.physics.add.collider(player, wolves, looseHeart, null, this);
 
   this.cameras.main.setBounds(0, 0, 3000);
 }
@@ -295,6 +297,22 @@ const activateSuperJump = (player, jumpItem) => {
   setTimeout(function(){ superJump = false; }, 8000);
   jumpItem.disableBody(true, true);
 }
+
+const activateInvincibility = () => {
+  invincible = true;
+  setTimeout(function(){ invincible = false; }, 3000);
+}
+
+const looseHeart = () => {
+  if (invincible === false) {
+    activateInvincibility();
+    hearts = hearts - 1;
+    updateHealthBar();
+  }
+}
+
+
+
 
 function collectStar (player, star)
 {
