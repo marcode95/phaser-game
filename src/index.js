@@ -15,6 +15,7 @@ import knightRunningLeft from './assets/knightRunningLeft.png';
 import wolfStanding from './assets/wolfStanding.png';
 import wolfRunningRight from './assets/wolfRunningRight.png';
 import wolfRunningLeft from './assets/wolfRunningLeft.png';
+import jumpItem from './assets/jumpItem.png';
 import dude from './assets/dude.png';
 import bomb from './assets/bomb.png';
 import star from './assets/star.png';
@@ -39,6 +40,7 @@ var config = {
 
 var player;
 var wolves;
+var jumpItems;
 var stars;
 var bombs;
 var platforms;
@@ -46,6 +48,8 @@ var cursors;
 var score = 0;
 var gameOver = false;
 var scoreText;
+
+let superJump = false;
 
 var game = new Phaser.Game(config);
 
@@ -78,6 +82,7 @@ function preload ()
   this.load.image('glowworm3', glowworm3);
   this.load.image('glowworm4', glowworm4);
   this.load.image('ground', ground);
+  this.load.image('jumpItem', jumpItem);
   this.load.image('star', star);
   this.load.image('bomb', bomb);
   this.load.spritesheet('dude', dude, { frameWidth: 32, frameHeight: 48 });
@@ -162,7 +167,7 @@ function create ()
 
   //  Input Events
   cursors = this.input.keyboard.createCursorKeys();
-
+  //  WOLVES
   wolves = this.physics.add.group({
     key: 'wolfStanding',
     repeat: 1,
@@ -170,6 +175,11 @@ function create ()
   })
 
   wolves.setVelocityX(-10);
+  //  JUMP ITEM
+  jumpItems = this.physics.add.group({
+    key: 'jumpItem',
+    setXY: { x: 500, y: 0}
+});  
 
   //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
   stars = this.physics.add.group({
@@ -193,6 +203,7 @@ function create ()
   //  Collide the player and the stars with the platforms
   this.physics.add.collider(player, platforms);
   this.physics.add.collider(wolves, platforms);
+  this.physics.add.collider(jumpItems, platforms);
   this.physics.add.collider(stars, platforms);
   this.physics.add.collider(bombs, platforms);
 
@@ -200,6 +211,8 @@ function create ()
   this.physics.add.overlap(player, stars, collectStar, null, this);
 
   this.physics.add.collider(player, bombs, hitBomb, null, this);
+
+  this.physics.add.collider(player, jumpItems, activateSuperJump, null, this);
 
   this.cameras.main.setBounds(0, 0, 3000);
 }
@@ -211,6 +224,10 @@ function update () {
   {
       return;
   }
+
+  // if (player.body.velocity.x === 0) {
+  //   player.anims.play('turn');
+  // }
 
   if (cursors.left.isDown)
   {  
@@ -232,9 +249,13 @@ function update () {
     player.anims.play('turn');
   }
 
-  if (cursors.up.isDown && player.body.touching.down)
-  {
+  if (cursors.up.isDown && player.body.touching.down) { 
+    if (superJump === false) {
       player.setVelocityY(-270);
+    }
+    else if (superJump === true) {
+      player.setVelocityY(-470);      
+    }
   }
 
   wolves.children.iterate(function (wolf) {
@@ -245,7 +266,12 @@ function update () {
       wolf.anims.play('wolfLeft', true);
     }
   });
+}
 
+const activateSuperJump = (player, jumpItem) => {
+  superJump = true;
+  setTimeout(function(){ superJump = false; }, 8000);
+  jumpItem.disableBody(true, true);
 }
 
 function collectStar (player, star)
