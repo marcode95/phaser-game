@@ -1,3 +1,17 @@
 body {
  margin: 0 auto;
+ position: relative;
+}
+
+#health-bar {
+  position: absolute;
+  top: 60px;
+  left: 16px;
+  display: flex;
+}
+
+#health-bar i {
+  font-size: 30px;
+  color: red;
+  margin-right: 13px;
 }

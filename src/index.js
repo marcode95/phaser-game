@@ -1,3 +1,5 @@
+import './style.css';
+
 import sky from './assets/sky.png';
 import stones from './assets/stones.png';
 import trees1 from './assets/trees1.png';
@@ -9,6 +11,7 @@ import glowworm2 from './assets/glowworm2.png';
 import glowworm3 from './assets/glowworm3.png';
 import glowworm4 from './assets/glowworm4.png';
 import ground from './assets/ground.png';
+import heart from './assets/heart.png';
 import knightStanding from './assets/knightStanding.png';
 import knightRunningRight from './assets/knightRunningRight.png';
 import knightRunningLeft from './assets/knightRunningLeft.png';
@@ -19,6 +22,20 @@ import jumpItem from './assets/jumpItem.png';
 import dude from './assets/dude.png';
 import bomb from './assets/bomb.png';
 import star from './assets/star.png';
+
+let hearts = 3;
+const healthBar = document.getElementById('health-bar');
+const updateHealthBar = () => {
+  healthBar.innerHTML = ''
+  for (let i=0; i < hearts; i++) {
+    const singleHeart = document.createElement('img');
+    singleHeart.setAttribute('src', heart);
+    healthBar.appendChild(singleHeart);
+  }
+}
+
+updateHealthBar();
+
 
 var config = {
   type: Phaser.AUTO,
@@ -50,6 +67,7 @@ var gameOver = false;
 var scoreText;
 
 let superJump = false;
+
 
 var game = new Phaser.Game(config);
 
@@ -85,6 +103,7 @@ function preload ()
   this.load.image('jumpItem', jumpItem);
   this.load.image('star', star);
   this.load.image('bomb', bomb);
+  this.load.image('heart', heart);
   this.load.spritesheet('dude', dude, { frameWidth: 32, frameHeight: 48 });
   this.load.spritesheet('knightStanding', knightStanding, { frameWidth: 64, frameHeight: 45 });
   this.load.spritesheet('knightRunningRight', knightRunningRight, { frameWidth: 96, frameHeight: 45 });
@@ -93,6 +112,7 @@ function preload ()
   this.load.spritesheet('wolfRunningRight', wolfRunningRight, { frameWidth: 64, frameHeight: 45 });
   this.load.spritesheet('wolfRunningLeft', wolfRunningLeft, { frameWidth: 64, frameHeight: 45 });
 }
+
 
 function create ()
 {
@@ -107,6 +127,8 @@ function create ()
   createLoop(this, 4, 'glowworm1', 1.25);
   createLoop(this, 4, 'glowworm2', 1.25);
   createLoop(this, 4, 'glowworm3', 1.25);
+
+
 
   //  The platforms group contains the ground and the 2 ledges we can jump on
   platforms = this.physics.add.staticGroup();
