@@ -19,6 +19,7 @@ import wolfStanding from './assets/wolfStanding.png';
 import wolfRunningRight from './assets/wolfRunningRight.png';
 import wolfRunningLeft from './assets/wolfRunningLeft.png';
 import jumpItem from './assets/jumpItem.png';
+import heartItem from './assets/heartItem.png';
 import dude from './assets/dude.png';
 import bomb from './assets/bomb.png';
 import star from './assets/star.png';
@@ -58,6 +59,7 @@ var config = {
 var player;
 var wolves;
 var jumpItems;
+var heartItems;
 var stars;
 var bombs;
 var platforms;
@@ -101,6 +103,7 @@ function preload ()
   this.load.image('glowworm4', glowworm4);
   this.load.image('ground', ground);
   this.load.image('jumpItem', jumpItem);
+  this.load.image('heartItem', heartItem);
   this.load.image('star', star);
   this.load.image('bomb', bomb);
   this.load.image('heart', heart);
@@ -192,16 +195,22 @@ function create ()
   //  WOLVES
   wolves = this.physics.add.group({
     key: 'wolfStanding',
-    repeat: 1,
-    setXY: { x: 300, y: 0, stepX: 70 }
+    setXY: { x: 300, y: 0 }
   })
-
   wolves.setVelocityX(0);
+
   //  JUMP ITEM
   jumpItems = this.physics.add.group({
     key: 'jumpItem',
     setXY: { x: 500, y: 0}
-});  
+  });  
+
+  //  HEART ITEM
+  heartItems = this.physics.add.group({
+    key: 'heartItem',
+    setXY: { x: 400, y: 0}
+  });  
+
 
   //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
   stars = this.physics.add.group({
@@ -226,6 +235,7 @@ function create ()
   this.physics.add.collider(player, platforms);
   this.physics.add.collider(wolves, platforms);
   this.physics.add.collider(jumpItems, platforms);
+  this.physics.add.collider(heartItems, platforms);
   this.physics.add.collider(stars, platforms);
   this.physics.add.collider(bombs, platforms);
 
@@ -235,6 +245,8 @@ function create ()
   this.physics.add.collider(player, bombs, hitBomb, null, this);
 
   this.physics.add.collider(player, jumpItems, activateSuperJump, null, this);
+
+  this.physics.add.collider(player, heartItems, addHeart, null, this);
 
   this.physics.add.collider(player, wolves, looseHeart, null, this);
 
@@ -309,6 +321,12 @@ const looseHeart = () => {
     hearts = hearts - 1;
     updateHealthBar();
   }
+}
+
+const addHeart = (player, heartItem) => {
+  hearts = hearts + 1;
+  updateHealthBar();
+  heartItem.disableBody(true, true);
 }
 
 
