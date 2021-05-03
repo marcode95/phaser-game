@@ -12,7 +12,9 @@ import ground from './assets/ground.png';
 import knightStanding from './assets/knightStanding.png';
 import knightRunningRight from './assets/knightRunningRight.png';
 import knightRunningLeft from './assets/knightRunningLeft.png';
-import knightJumping from './assets/knightJumping.png';
+import wolfStanding from './assets/wolfStanding.png';
+import wolfRunningRight from './assets/wolfRunningRight.png';
+import wolfRunningLeft from './assets/wolfRunningLeft.png';
 import dude from './assets/dude.png';
 import bomb from './assets/bomb.png';
 import star from './assets/star.png';
@@ -36,6 +38,7 @@ var config = {
 };
 
 var player;
+var wolves;
 var stars;
 var bombs;
 var platforms;
@@ -81,7 +84,9 @@ function preload ()
   this.load.spritesheet('knightStanding', knightStanding, { frameWidth: 64, frameHeight: 45 });
   this.load.spritesheet('knightRunningRight', knightRunningRight, { frameWidth: 96, frameHeight: 45 });
   this.load.spritesheet('knightRunningLeft', knightRunningLeft, { frameWidth: 96, frameHeight: 45 });
-  this.load.spritesheet('knightJumping', knightJumping, { frameWidth: 96, frameHeight: 45 });
+  this.load.spritesheet('wolfStanding', wolfStanding, { frameWidth: 64, frameHeight: 45 });
+  this.load.spritesheet('wolfRunningRight', wolfRunningRight, { frameWidth: 64, frameHeight: 45 });
+  this.load.spritesheet('wolfRunningLeft', wolfRunningLeft, { frameWidth: 64, frameHeight: 45 });
 }
 
 function create ()
@@ -113,11 +118,11 @@ function create ()
 //   platforms.create(750, 220, 'ground');
 
   // The player and its settings
-  player = this.physics.add.sprite(100, 450, 'dude');
+  player = this.physics.add.sprite(100, 450, 'knightStanding');
 
   //  Player physics properties. Give the little guy a slight bounce.
-  player.setBounce(0.2);
   player.setCollideWorldBounds(true);
+  player.setGravityY(200);
 
   //  Our player animations, turning, walking left and walking right.
   this.anims.create({
@@ -141,13 +146,35 @@ function create ()
       repeat: -1
   });
 
+  this.anims.create({
+    key: 'wolfRight',
+    frames: this.anims.generateFrameNumbers('wolfRunningRight', { start: 0, end: 7 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'wolfLeft',
+    frames: this.anims.generateFrameNumbers('wolfRunningLeft', { start: 0, end: 7 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
   //  Input Events
   cursors = this.input.keyboard.createCursorKeys();
+
+  wolves = this.physics.add.group({
+    key: 'wolfStanding',
+    repeat: 1,
+    setXY: { x: 300, y: 0, stepX: 70 }
+  })
+
+  wolves.setVelocityX(-10);
 
   //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
   stars = this.physics.add.group({
       key: 'star',
-      repeat: 11,
+      repeat: 2,
       setXY: { x: 12, y: 0, stepX: 70 }
   });
 
@@ -161,10 +188,11 @@ function create ()
   bombs = this.physics.add.group();
 
   //  The score
-  scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+  scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
 
   //  Collide the player and the stars with the platforms
   this.physics.add.collider(player, platforms);
+  this.physics.add.collider(wolves, platforms);
   this.physics.add.collider(stars, platforms);
   this.physics.add.collider(bombs, platforms);
 
@@ -185,7 +213,7 @@ function update () {
   }
 
   if (cursors.left.isDown)
-  {
+  {  
       player.setVelocityX(-160);
       player.anims.play('left', true);
 
@@ -199,16 +227,25 @@ function update () {
       cam.scrollX += 2;
   }
   else
-  {
-      player.setVelocityX(0);
-
-      player.anims.play('turn');
+  {      
+    player.setVelocityX(0);
+    player.anims.play('turn');
   }
 
   if (cursors.up.isDown && player.body.touching.down)
   {
-      player.setVelocityY(-330);
+      player.setVelocityY(-270);
   }
+
+  wolves.children.iterate(function (wolf) {
+    if (wolf.body.velocity.x > 0) {
+      wolf.anims.play('wolfRight', true);
+    }
+    if (wolf.body.velocity.x < 0) {
+      wolf.anims.play('wolfLeft', true);
+    }
+  });
+
 }
 
 function collectStar (player, star)
