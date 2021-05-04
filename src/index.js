@@ -15,6 +15,7 @@ import heart from './assets/heart.png';
 import knightStanding from './assets/knightStanding.png';
 import knightRunningRight from './assets/knightRunningRight.png';
 import knightRunningLeft from './assets/knightRunningLeft.png';
+import knightAttackingRight from './assets/knightAttackingRight.png';
 import wolfStanding from './assets/wolfStanding.png';
 import wolfRunningRight from './assets/wolfRunningRight.png';
 import wolfRunningLeft from './assets/wolfRunningLeft.png';
@@ -66,6 +67,7 @@ var stars;
 var bombs;
 var platforms;
 var cursors;
+var spaceKey
 var score = 0;
 var gameOver = false;
 var scoreText;
@@ -111,12 +113,13 @@ function preload ()
   this.load.image('bomb', bomb);
   this.load.image('heart', heart);
   this.load.spritesheet('dude', dude, { frameWidth: 32, frameHeight: 48 });
-  this.load.spritesheet('knightStanding', knightStanding, { frameWidth: 64, frameHeight: 45 });
-  this.load.spritesheet('knightRunningRight', knightRunningRight, { frameWidth: 96, frameHeight: 45 });
-  this.load.spritesheet('knightRunningLeft', knightRunningLeft, { frameWidth: 96, frameHeight: 45 });
-  this.load.spritesheet('wolfStanding', wolfStanding, { frameWidth: 64, frameHeight: 45 });
-  this.load.spritesheet('wolfRunningRight', wolfRunningRight, { frameWidth: 64, frameHeight: 45 });
-  this.load.spritesheet('wolfRunningLeft', wolfRunningLeft, { frameWidth: 64, frameHeight: 45 });
+  this.load.spritesheet('knightStanding', knightStanding, { frameWidth: 128, frameHeight: 90 });
+  this.load.spritesheet('knightRunningRight', knightRunningRight, { frameWidth: 192, frameHeight: 90 });
+  this.load.spritesheet('knightRunningLeft', knightRunningLeft, { frameWidth: 192, frameHeight: 90 });
+  this.load.spritesheet('knightAttackingRight', knightAttackingRight, { frameWidth: 288, frameHeight: 90 });
+  this.load.spritesheet('wolfStanding', wolfStanding, { frameWidth: 128, frameHeight: 90 });
+  this.load.spritesheet('wolfRunningRight', wolfRunningRight, { frameWidth: 128, frameHeight: 90 });
+  this.load.spritesheet('wolfRunningLeft', wolfRunningLeft, { frameWidth: 128, frameHeight: 90 });
 }
 
 
@@ -180,6 +183,13 @@ function create ()
   });
 
   this.anims.create({
+    key: 'attackRight',
+    frames: this.anims.generateFrameNumbers('knightAttackingRight', { start: 0, end: 21 }),
+    frameRate: 10,
+    repeat: -1
+  });  
+
+  this.anims.create({
     key: 'wolfRight',
     frames: this.anims.generateFrameNumbers('wolfRunningRight', { start: 0, end: 7 }),
     frameRate: 10,
@@ -195,6 +205,8 @@ function create ()
 
   //  Input Events
   cursors = this.input.keyboard.createCursorKeys();
+  spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
   //  WOLVES
   wolves = this.physics.add.group({
     key: 'wolfStanding',
@@ -284,6 +296,7 @@ function update () {
 
       cam.scrollX -= 2;
   }
+
   else if (cursors.right.isDown)
   {
       player.setVelocityX(160);
@@ -291,10 +304,16 @@ function update () {
 
       cam.scrollX += 2;
   }
+
   else
   {      
     player.setVelocityX(0);
     player.anims.play('turn');
+  }
+
+  if (spaceKey.isDown) {  
+    player.anims.play('attackRight', false);
+    
   }
 
   if (cursors.up.isDown && player.body.touching.down) { 
