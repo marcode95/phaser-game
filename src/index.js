@@ -12,6 +12,12 @@ import glowworm3 from './assets/glowworm3.png';
 import glowworm4 from './assets/glowworm4.png';
 import ground from './assets/ground.png';
 import heart from './assets/heart.png';
+import bullet from './assets/bullet.png';
+import jumpItem from './assets/jumpItem.png';
+import heartItem from './assets/heartItem.png';
+import starItem from './assets/starItem.png';
+
+
 import knightStanding from './assets/knightStanding.png';
 import knightRunningRight from './assets/knightRunningRight.png';
 import knightRunningLeft from './assets/knightRunningLeft.png';
@@ -19,12 +25,11 @@ import knightAttackingRight from './assets/knightAttackingRight.png';
 import wolfStanding from './assets/wolfStanding.png';
 import wolfRunningRight from './assets/wolfRunningRight.png';
 import wolfRunningLeft from './assets/wolfRunningLeft.png';
-import jumpItem from './assets/jumpItem.png';
-import heartItem from './assets/heartItem.png';
-import starItem from './assets/starItem.png';
+
 import dude from './assets/dude.png';
 import bomb from './assets/bomb.png';
 import star from './assets/star.png';
+
 
 let hearts = 3;
 const healthBar = document.getElementById('health-bar');
@@ -63,8 +68,7 @@ var wolves;
 var jumpItems;
 var heartItems;
 var starItems;
-var stars;
-var bombs;
+var bullets;
 var platforms;
 var cursors;
 var spaceKey
@@ -73,7 +77,8 @@ var gameOver = false;
 var scoreText;
 let invincible = false;
 let superJump = false;
-
+var stars;
+var bombs;
 
 var game = new Phaser.Game(config);
 
@@ -109,9 +114,8 @@ function preload ()
   this.load.image('jumpItem', jumpItem);
   this.load.image('heartItem', heartItem);
   this.load.image('starItem', starItem);
-  this.load.image('star', star);
-  this.load.image('bomb', bomb);
-  this.load.image('heart', heart);
+  this.load.image('bullet', bullet);
+
   this.load.spritesheet('dude', dude, { frameWidth: 32, frameHeight: 48 });
   this.load.spritesheet('knightStanding', knightStanding, { frameWidth: 128, frameHeight: 90 });
   this.load.spritesheet('knightRunningRight', knightRunningRight, { frameWidth: 192, frameHeight: 90 });
@@ -120,6 +124,10 @@ function preload ()
   this.load.spritesheet('wolfStanding', wolfStanding, { frameWidth: 128, frameHeight: 90 });
   this.load.spritesheet('wolfRunningRight', wolfRunningRight, { frameWidth: 128, frameHeight: 90 });
   this.load.spritesheet('wolfRunningLeft', wolfRunningLeft, { frameWidth: 128, frameHeight: 90 });
+
+  this.load.image('star', star);
+  this.load.image('bomb', bomb);
+  this.load.image('heart', heart);
 }
 
 
@@ -136,7 +144,6 @@ function create ()
   createLoop(this, 4, 'glowworm1', 1.25);
   createLoop(this, 4, 'glowworm2', 1.25);
   createLoop(this, 4, 'glowworm3', 1.25);
-
 
 
   //  The platforms group contains the ground and the 2 ledges we can jump on
@@ -232,6 +239,23 @@ function create ()
     setXY: { x: 600, y: 0}
   });  
 
+  //  BULLET 
+	bullets = this.physics.add.group();
+	// bullets.enableBody = true;
+
+	bullets.createMultiple(20, 'bullet');
+
+	// bullets.callAll('events.onOutOfBounds.add', 'events.onOutOfBounds', resetBullet);
+	// bullets.callAll('anchor.setTo', 'anchor', 0.5, 1.0);
+ 
+	// bullets.setAll('checkWorldBounds', true);
+
+
+
+
+
+
+
 
   //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
   stars = this.physics.add.group({
@@ -312,9 +336,11 @@ function update () {
   }
 
   if (spaceKey.isDown) {  
-    player.anims.play('attackRight', false);
-    
+    player.anims.play('right', false);
+    //fireBullet(this);    
   }
+
+
 
   if (cursors.up.isDown && player.body.touching.down) { 
     if (superJump === false) {
@@ -364,6 +390,35 @@ const activateInvincibilityItem = (player, starItem) => {
   activateInvincibility(8000);
   starItem.disableBody(true, true);
 }
+
+const resetBullet = (bullet) => {
+	bullet.kill();
+}
+
+class newBulletObj extends Phaser.GameObjects.Image {
+  constructor (scene, x, y) {
+    super(scene, x, y, 'bullet');
+  }
+}
+
+const fireBullet = (scene) => {
+  console.log('bla0');
+  var newBulletObj = new newBulletObj(scene, player.x, player.y);
+  console.log('bla1');
+  bullets.add(newBulletObj);
+  console.log('bla2');
+  newBulletObj.body.velocity.x = 400;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 function collectStar (player, star)
