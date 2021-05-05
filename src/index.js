@@ -118,7 +118,7 @@ class SceneMain extends Phaser.Scene {
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
     // platforms.create(32, 670, 'ground').setScale(1.5).refreshBody();
     // platforms.create(96, 670, 'ground').setScale(1.5).refreshBody();
-    createGround(32, 670, 'ground', 1.5, 15);
+    createGround(32, 670, 'ground', 1.5, 5);
   
     //  Now let's create some ledges
     //  platforms.create(600, 400, 'ground');
@@ -262,13 +262,17 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(player, starItems, activateInvincibilityItem, null, this);
   
     this.physics.add.collider(player, wolves, looseHeart, null, this);
+
+    this.physics.add.collider(bullets, wolves, killWolf, null, this);
   
     this.cameras.main.setBounds(0, 0, 3000);
   }
 
   update () {
     const cam = this.cameras.main;
-  
+    cam.startFollow(player);
+    cam.setFollowOffset(0, 600);
+    
     if (gameOver)
     {
         return;
@@ -283,7 +287,7 @@ class SceneMain extends Phaser.Scene {
         player.setVelocityX(-160);
         player.anims.play('left', true);
   
-        cam.scrollX -= 2;
+ 
     }
   
     else if (cursors.right.isDown)
@@ -291,7 +295,7 @@ class SceneMain extends Phaser.Scene {
         player.setVelocityX(160);
         player.anims.play('right', true);
   
-        cam.scrollX += 2;
+ 
     }
   
     else
@@ -303,9 +307,7 @@ class SceneMain extends Phaser.Scene {
     if (spaceKey.isDown) {
       player.anims.play('right', false);
       if (readyToShoot) {
-        // fireBullet(this);
-        bullets.add(this.physics.add.image(player.x, player.y, "bullet"));
-        console.log(bullets)
+        bullets.add(this.physics.add.image(player.x + 38, player.y + 15, "bullet"));
         readyToShoot = false;
         setTimeout(function(){ readyToShoot = true; }, 500);
       }        
@@ -315,7 +317,7 @@ class SceneMain extends Phaser.Scene {
   
     if (cursors.up.isDown && player.body.touching.down) { 
       if (superJump === false) {
-        player.setVelocityY(-270);
+        player.setVelocityY(-370);
       }
       else if (superJump === true) {
         player.setVelocityY(-470);      
@@ -371,20 +373,6 @@ var config = {
 
 var game = new Phaser.Game(config);
 
-
-class NewBulletObj extends Phaser.GameObjects.Image {
-  constructor (scene, x, y) {
-    super(scene, x, y, 'bullet');
-  }
-}
-
-const fireBullet = (scene) => {
-  var newBulletObj = new NewBulletObj(scene, player.x, player.y);
-  console.log(newBulletObj);
-  bullets.add(newBulletObj);
-  console.log(bullets);
-  newBulletObj.body.velocity.x = 200;
-}
 
 
 
@@ -460,12 +448,9 @@ const activateInvincibilityItem = (player, starItem) => {
   starItem.disableBody(true, true);
 }
 
-const resetBullet = (bullet) => {
-	bullet.kill();
+const killWolf = (bullet, wolf) => {
+  wolf.disableBody(true, true);
 }
-
-
-
 
 
 
