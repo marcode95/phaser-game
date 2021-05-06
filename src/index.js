@@ -10,8 +10,11 @@ import glowworm1 from './assets/glowworm1.png';
 import glowworm2 from './assets/glowworm2.png';
 import glowworm3 from './assets/glowworm3.png';
 import glowworm4 from './assets/glowworm4.png';
+
 import ground from './assets/ground.png';
+import longGround from './assets/longGround.png';
 import lavaTile from './assets/lava.png';
+
 import heart from './assets/heart.png';
 import bullet from './assets/bullet.png';
 import jumpItem from './assets/jumpItem.png';
@@ -86,6 +89,7 @@ class SceneMain extends Phaser.Scene {
     this.load.image('glowworm3', glowworm3);
     this.load.image('glowworm4', glowworm4);
     this.load.image('ground', ground);
+    this.load.image('longGround', longGround);
     this.load.image('lavaTile', lavaTile);
     this.load.image('jumpItem', jumpItem);
     this.load.image('heartItem', heartItem);
@@ -109,7 +113,7 @@ class SceneMain extends Phaser.Scene {
     this.load.image('kar', knightAttackingRight);
     this.load.image('kal', knightAttackingLeft);
 
-    this.load.spritesheet('wolfStanding', wolfStanding, { frameWidth: 128, frameHeight: 90 });
+    this.load.spritesheet('wolfStanding', wolfStanding, { frameWidth: 80, frameHeight: 85 });
     this.load.spritesheet('wolfRunningRight', wolfRunningRight, { frameWidth: 128, frameHeight: 90 });
     this.load.spritesheet('wolfRunningLeft', wolfRunningLeft, { frameWidth: 128, frameHeight: 90 });
 
@@ -136,15 +140,15 @@ class SceneMain extends Phaser.Scene {
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
     // platforms.create(32, 670, 'ground').setScale(1.5).refreshBody();
     // platforms.create(96, 670, 'ground').setScale(1.5).refreshBody();
-    createGround(32, 670, 'ground', 1.5, 5);
-    createGround(500, 570, 'ground', 1.5, 2);
-    createGround(730, 470, 'ground', 1.5, 2);
-    createGround(1200, 270, 'ground', 1.5, 4);
+    createGround(32, 670, 'ground', 1.5, 3);
+    createGround(450, 570, 'ground', 1.5, 1);
+    createGround(650, 470, 'ground', 1.5, 1);
+    createGround(400, 230, 'longGround', 1.5, 1);
     
-    createLava(385, 680, 'lavaTile', 1.5, 10);
+    createLava(322, 680, 'lavaTile', 1.5, 20);
 
   
-    var movingPlattformOne = this.physics.add.image(1000, 470, 'ground')
+    var movingPlattformOne = this.physics.add.image(850, 390, 'ground')
     .setImmovable(true)
     .setVelocity(100, -100);
 
@@ -154,10 +158,10 @@ class SceneMain extends Phaser.Scene {
       targets: movingPlattformOne.body.velocity,
       loop: -1,
       tweens: [
-        { x:    0, y: -100, duration: 2000, ease: 'Stepped' },
-        { x:    0, y:    0, duration: 500, ease: 'Stepped' },
-        { x:    0, y:  100, duration: 2000, ease: 'Stepped' },
-        { x:    0, y:    0, duration: 500, ease: 'Stepped' }
+        { x:    0, y: -120, duration: 1200, ease: 'Stepped' },
+        { x:    0, y:    0, duration: 800, ease: 'Stepped' },
+        { x:    0, y:  120, duration: 1200, ease: 'Stepped' },
+        { x:    0, y:    0, duration: 800, ease: 'Stepped' }
       ]
     });
   
@@ -165,7 +169,7 @@ class SceneMain extends Phaser.Scene {
     player = this.physics.add.sprite(100, 450, 'krr0');
   
     //  Player physics properties. Give the little guy a slight bounce.
-    player.setCollideWorldBounds(true);
+    player.setCollideWorldBounds(false);
     player.setGravityY(300);
   
     //  Our player animations, turning, walking left and walking right.
@@ -221,14 +225,14 @@ class SceneMain extends Phaser.Scene {
     this.anims.create({
       key: 'wolfRight',
       frames: this.anims.generateFrameNumbers('wolfRunningRight', { start: 0, end: 7 }),
-      frameRate: 10,
+      frameRate: 15,
       repeat: -1
     });
   
     this.anims.create({
       key: 'wolfLeft',
       frames: this.anims.generateFrameNumbers('wolfRunningLeft', { start: 0, end: 7 }),
-      frameRate: 10,
+      frameRate: 15,
       repeat: -1
     });
   
@@ -240,9 +244,9 @@ class SceneMain extends Phaser.Scene {
     //  WOLVES
     wolves = this.physics.add.group({
       key: 'wolfStanding',
-     // setXY: { x: 700, y: 0 }
+      setXY: { x: 200, y: 120 }
     })
-    wolves.setVelocityX(0);
+    wolves.setVelocityX(150);
   
     //  JUMP ITEM
     jumpItems = this.physics.add.group({
@@ -264,7 +268,7 @@ class SceneMain extends Phaser.Scene {
   
     //  BULLET 
     bullets = this.physics.add.group({
-      key: 'bullet',
+
     });
 
     //  LEFTBULLET 
@@ -282,7 +286,6 @@ class SceneMain extends Phaser.Scene {
   
     //  Collide the player and the stars with the platforms
     this.physics.add.collider(player, platforms);
-    this.physics.add.collider(wolves, platforms);
     this.physics.add.collider(jumpItems, platforms);
     this.physics.add.collider(heartItems, platforms);
     this.physics.add.collider(starItems, platforms);
@@ -300,8 +303,12 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(player, wolves, looseHeart, null, this);
 
     this.physics.add.collider(bullets, wolves, killWolf, null, this);
+
+    this.physics.add.collider(leftBullets, wolves, killWolf, null, this);
   
     this.physics.add.collider(player, lava, looseHeart, null, this);
+
+
 
     this.cameras.main.setBounds(0, 0, 3000);
   }
@@ -391,6 +398,18 @@ class SceneMain extends Phaser.Scene {
       bullet.body.allowGravity = false;
       setTimeout(function(){ bullet.disableBody(true, true); }, 1500);
     });
+
+    this.physics.add.collider(wolves, platforms, patrolPlatform, null, this);
+
+  }
+}
+
+const patrolPlatform = (wolf, platform) => {
+  if (wolf.body.velocity.x > 0 && wolf.x + wolf.width/2 > platform.x + platform.width/2) {
+      wolf.body.velocity.x *= -1;
+  }
+  else if (wolf.body.velocity.x < 0 && wolf.x - wolf.width/2 < platform.x - platform.width/2) {
+      wolf.body.velocity.x *= -1;
   }
 }
 
@@ -412,7 +431,7 @@ var config = {
       default: 'arcade',
       arcade: {
           gravity: { y: 300 },
-          debug: false
+          debug: true
       }
   },
   scene: [
@@ -466,7 +485,7 @@ const createLoop = (scene, count, texture, scrollFactor) => {
 const createGround = (start, height, texture, scale, count) => {
   let x = 0;
   for (let i = 0; i < count; ++i) {
-    const m = platforms.create(start + x, height, texture).setScale(scale).refreshBody();
+    const m = platforms.create(start + x*1.5, height, texture).setScale(scale).refreshBody();
     x += m.width;
   }
 }
@@ -474,7 +493,7 @@ const createGround = (start, height, texture, scale, count) => {
 const createLava = (start, height, texture, scale, count) => {
   let x = 0;
   for (let i = 0; i < count; ++i) {
-    const m = lava.create(start + x, height, texture).setScale(scale).refreshBody();
+    const m = lava.create(start + x*1.5, height, texture).setScale(scale).refreshBody();
     x += m.width;
   }
 }
