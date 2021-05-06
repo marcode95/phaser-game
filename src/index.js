@@ -11,6 +11,7 @@ import glowworm2 from './assets/glowworm2.png';
 import glowworm3 from './assets/glowworm3.png';
 import glowworm4 from './assets/glowworm4.png';
 import ground from './assets/ground.png';
+import lavaTile from './assets/lava.png';
 import heart from './assets/heart.png';
 import bullet from './assets/bullet.png';
 import jumpItem from './assets/jumpItem.png';
@@ -46,6 +47,7 @@ var starItems;
 var bullets;
 var leftBullets;
 var platforms;
+var lava;
 var cursors;
 var spaceKey
 var score = 0;
@@ -84,6 +86,7 @@ class SceneMain extends Phaser.Scene {
     this.load.image('glowworm3', glowworm3);
     this.load.image('glowworm4', glowworm4);
     this.load.image('ground', ground);
+    this.load.image('lavaTile', lavaTile);
     this.load.image('jumpItem', jumpItem);
     this.load.image('heartItem', heartItem);
     this.load.image('starItem', starItem);
@@ -129,13 +132,16 @@ class SceneMain extends Phaser.Scene {
   
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = this.physics.add.staticGroup();
-  
+    lava = this.physics.add.staticGroup();
+    
     //  Here we create the ground.
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
     // platforms.create(32, 670, 'ground').setScale(1.5).refreshBody();
     // platforms.create(96, 670, 'ground').setScale(1.5).refreshBody();
     createGround(32, 670, 'ground', 1.5, 5);
     createGround(500, 570, 'ground', 1.5, 2);
+
+    createLava(385, 680, 'lavaTile', 1.5, 10);
 
   
     //  Now let's create some ledges
@@ -235,7 +241,7 @@ class SceneMain extends Phaser.Scene {
     //  HEART ITEM
     heartItems = this.physics.add.group({
       key: 'heartItem',
-      setXY: { x: 300, y: 0}
+      // setXY: { x: 300, y: 0}
     });
   
     //  STAR ITEM
@@ -280,6 +286,8 @@ class SceneMain extends Phaser.Scene {
 
     this.physics.add.collider(bullets, wolves, killWolf, null, this);
   
+    this.physics.add.collider(player, lava, looseHeart, null, this);
+
     this.cameras.main.setBounds(0, 0, 3000);
   }
 
@@ -419,7 +427,7 @@ var game = new Phaser.Game(config);
 
 
 
-let hearts = 3;
+let hearts = 1;
 const healthBar = document.getElementById('health-bar');
 const updateHealthBar = () => {
   healthBar.innerHTML = ''
@@ -448,6 +456,14 @@ const createGround = (start, height, texture, scale, count) => {
   }
 }
 
+const createLava = (start, height, texture, scale, count) => {
+  let x = 0;
+  for (let i = 0; i < count; ++i) {
+    const m = lava.create(start + x, height, texture).setScale(scale).refreshBody();
+    x += m.width;
+  }
+}
+
 const activateSuperJump = (player, jumpItem) => {
   superJump = true;
   setTimeout(function(){ superJump = false; }, 8000);
@@ -461,7 +477,7 @@ const activateInvincibility = (time) => {
 
 const looseHeart = () => {
   if (invincible === false) {
-    activateInvincibility(3000);
+    activateInvincibility(1000);
     hearts = hearts - 1;
     updateHealthBar();
   }
