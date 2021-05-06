@@ -20,6 +20,7 @@ import bullet from './assets/bullet.png';
 import jumpItem from './assets/jumpItem.png';
 import heartItem from './assets/heartItem.png';
 import starItem from './assets/starItem.png';
+import coin from './assets/coin.png'
 
 import wolfStanding from './assets/wolfStanding.png';
 import wolfRunningRight from './assets/wolfRunningRight.png';
@@ -95,6 +96,7 @@ class SceneMain extends Phaser.Scene {
     this.load.image('heartItem', heartItem);
     this.load.image('starItem', starItem);
     this.load.image('bullet', bullet);
+    this.load.image('coin', coin);
     
     this.load.image('krr0', knightRunningRight0);
     this.load.image('krr1', knightRunningRight1);
@@ -285,6 +287,12 @@ class SceneMain extends Phaser.Scene {
     createLoop(this, 4, 'glowworm2', 1.50);
     createLoop(this, 4, 'glowworm3', 1.50);
 
+    //  COIN 
+    coin = this.physics.add.group({
+      key: 'coin',
+      setXY: { x: 200, y: 0}
+    });
+
   
     //  The score
     scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
@@ -294,6 +302,7 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(jumpItems, platforms);
     this.physics.add.collider(heartItems, platforms);
     this.physics.add.collider(starItems, platforms);
+    this.physics.add.collider(coin, platforms);
     this.physics.add.collider(player, movingPlattformOne);
 
   
@@ -436,7 +445,7 @@ var config = {
       default: 'arcade',
       arcade: {
           gravity: { y: 300 },
-          debug: true
+          debug: false
       }
   },
   scene: [
