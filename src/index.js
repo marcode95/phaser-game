@@ -125,9 +125,7 @@ class SceneMain extends Phaser.Scene {
     createLoop(this, 4, 'trees3', 0.8);
     createLoop(this, 4, 'stones', 1);
     createLoop(this, 4, 'glowworm4', 1);
-    createLoop(this, 4, 'glowworm1', 1.25);
-    createLoop(this, 4, 'glowworm2', 1.25);
-    createLoop(this, 4, 'glowworm3', 1.25);
+
   
   
     //  The platforms group contains the ground and the 2 ledges we can jump on
@@ -140,21 +138,35 @@ class SceneMain extends Phaser.Scene {
     // platforms.create(96, 670, 'ground').setScale(1.5).refreshBody();
     createGround(32, 670, 'ground', 1.5, 5);
     createGround(500, 570, 'ground', 1.5, 2);
-
+    createGround(730, 470, 'ground', 1.5, 2);
+    createGround(1200, 270, 'ground', 1.5, 4);
+    
     createLava(385, 680, 'lavaTile', 1.5, 10);
 
   
-    //  Now let's create some ledges
-    //  platforms.create(600, 400, 'ground');
-    //  platforms.create(50, 250, 'ground');
-    //  platforms.create(750, 220, 'ground');
+    var movingPlattformOne = this.physics.add.image(1000, 470, 'ground')
+    .setImmovable(true)
+    .setVelocity(100, -100);
+
+    movingPlattformOne.body.setAllowGravity(false);
+    
+    this.tweens.timeline({
+      targets: movingPlattformOne.body.velocity,
+      loop: -1,
+      tweens: [
+        { x:    0, y: -100, duration: 2000, ease: 'Stepped' },
+        { x:    0, y:    0, duration: 500, ease: 'Stepped' },
+        { x:    0, y:  100, duration: 2000, ease: 'Stepped' },
+        { x:    0, y:    0, duration: 500, ease: 'Stepped' }
+      ]
+    });
   
     // The player and its settings
     player = this.physics.add.sprite(100, 450, 'krr0');
   
     //  Player physics properties. Give the little guy a slight bounce.
     player.setCollideWorldBounds(true);
-    player.setGravityY(200);
+    player.setGravityY(300);
   
     //  Our player animations, turning, walking left and walking right.
     this.anims.create({
@@ -260,7 +272,9 @@ class SceneMain extends Phaser.Scene {
       key: 'bullet',
     });
 
-
+    createLoop(this, 4, 'glowworm1', 1.50);
+    createLoop(this, 4, 'glowworm2', 1.50);
+    createLoop(this, 4, 'glowworm3', 1.50);
 
   
     //  The score
@@ -272,6 +286,7 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(jumpItems, platforms);
     this.physics.add.collider(heartItems, platforms);
     this.physics.add.collider(starItems, platforms);
+    this.physics.add.collider(player, movingPlattformOne);
 
   
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
