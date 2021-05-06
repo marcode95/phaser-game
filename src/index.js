@@ -17,20 +17,26 @@ import jumpItem from './assets/jumpItem.png';
 import heartItem from './assets/heartItem.png';
 import starItem from './assets/starItem.png';
 
-
-import knightStanding from './assets/knightStanding.png';
-import knightRunningRight from './assets/knightRunningRight.png';
-import knightRunningLeft from './assets/knightRunningLeft.png';
-import knightAttackingRight from './assets/knightAttackingRight.png';
 import wolfStanding from './assets/wolfStanding.png';
 import wolfRunningRight from './assets/wolfRunningRight.png';
 import wolfRunningLeft from './assets/wolfRunningLeft.png';
 
-import dude from './assets/dude.png';
-import bomb from './assets/bomb.png';
-import star from './assets/star.png';
+import knightRunningRight0 from './assets/Walk_01.png';
+import knightRunningRight1 from './assets/Walk_02.png';
+import knightRunningRight2 from './assets/Walk_03.png';
+import knightRunningRight3 from './assets/Walk_04.png';
+import knightRunningRight4 from './assets/Walk_05.png';
+import knightRunningRight5 from './assets/Walk_06.png';
 
+import knightRunningLeft0 from './assets/Walkleft_01.png';
+import knightRunningLeft1 from './assets/Walkleft_02.png';
+import knightRunningLeft2 from './assets/Walkleft_03.png';
+import knightRunningLeft3 from './assets/Walkleft_04.png';
+import knightRunningLeft4 from './assets/Walkleft_05.png';
+import knightRunningLeft5 from './assets/Walkleft_06.png';
 
+import knightAttackingRight from './assets/Action_16.png';
+import knightAttackingLeft from './assets/Actionleft_16.png';
 
 var player;
 var wolves;
@@ -38,6 +44,7 @@ var jumpItems;
 var heartItems;
 var starItems;
 var bullets;
+var leftBullets;
 var platforms;
 var cursors;
 var spaceKey
@@ -47,8 +54,7 @@ var scoreText;
 let invincible = false;
 let superJump = false;
 let readyToShoot = true;
-var stars;
-var bombs;
+var aKey;
 
 
 class SceneMainMenu extends Phaser.Scene {
@@ -82,18 +88,28 @@ class SceneMain extends Phaser.Scene {
     this.load.image('heartItem', heartItem);
     this.load.image('starItem', starItem);
     this.load.image('bullet', bullet);
+    
+    this.load.image('krr0', knightRunningRight0);
+    this.load.image('krr1', knightRunningRight1);
+    this.load.image('krr2', knightRunningRight2);
+    this.load.image('krr3', knightRunningRight3);
+    this.load.image('krr4', knightRunningRight4);
+    this.load.image('krr5', knightRunningRight5);
 
-    this.load.spritesheet('dude', dude, { frameWidth: 32, frameHeight: 48 });
-    this.load.spritesheet('knightStanding', knightStanding, { frameWidth: 128, frameHeight: 90 });
-    this.load.spritesheet('knightRunningRight', knightRunningRight, { frameWidth: 192, frameHeight: 90 });
-    this.load.spritesheet('knightRunningLeft', knightRunningLeft, { frameWidth: 192, frameHeight: 90 });
-    this.load.spritesheet('knightAttackingRight', knightAttackingRight, { frameWidth: 288, frameHeight: 90 });
+    this.load.image('krl0', knightRunningLeft0);
+    this.load.image('krl1', knightRunningLeft1);
+    this.load.image('krl2', knightRunningLeft2);
+    this.load.image('krl3', knightRunningLeft3);
+    this.load.image('krl4', knightRunningLeft4);
+    this.load.image('krl5', knightRunningLeft5);
+
+    this.load.image('kar', knightAttackingRight);
+    this.load.image('kal', knightAttackingLeft);
+
     this.load.spritesheet('wolfStanding', wolfStanding, { frameWidth: 128, frameHeight: 90 });
     this.load.spritesheet('wolfRunningRight', wolfRunningRight, { frameWidth: 128, frameHeight: 90 });
     this.load.spritesheet('wolfRunningLeft', wolfRunningLeft, { frameWidth: 128, frameHeight: 90 });
 
-    this.load.image('star', star);
-    this.load.image('bomb', bomb);
     this.load.image('heart', heart);
   }
 
@@ -119,6 +135,8 @@ class SceneMain extends Phaser.Scene {
     // platforms.create(32, 670, 'ground').setScale(1.5).refreshBody();
     // platforms.create(96, 670, 'ground').setScale(1.5).refreshBody();
     createGround(32, 670, 'ground', 1.5, 5);
+    createGround(500, 570, 'ground', 1.5, 2);
+
   
     //  Now let's create some ledges
     //  platforms.create(600, 400, 'ground');
@@ -126,7 +144,7 @@ class SceneMain extends Phaser.Scene {
     //  platforms.create(750, 220, 'ground');
   
     // The player and its settings
-    player = this.physics.add.sprite(100, 450, 'knightStanding');
+    player = this.physics.add.sprite(100, 450, 'krr0');
   
     //  Player physics properties. Give the little guy a slight bounce.
     player.setCollideWorldBounds(true);
@@ -135,28 +153,49 @@ class SceneMain extends Phaser.Scene {
     //  Our player animations, turning, walking left and walking right.
     this.anims.create({
         key: 'left',
-        frames: this.anims.generateFrameNumbers('knightRunningLeft', { start: 0, end: 7 }),
+        frames: [
+          { key: 'krl0' },
+          { key: 'krl1' },
+          { key: 'krl2' },
+          { key: 'krl3' },
+          { key: 'krl4' },
+          { key: 'krl5' }
+        ],
         frameRate: 10,
         repeat: -1
     });
   
     this.anims.create({
         key: 'turn',
-        frames: this.anims.generateFrameNumbers('knightStanding', { start: 0, end: 14 }),
+        frames: [{ key: 'krr0' }],
         frameRate: 10,
         repeat: -1
     });
   
     this.anims.create({
         key: 'right',
-        frames: this.anims.generateFrameNumbers('knightRunningRight', { start: 0, end: 7 }),
+        frames: [
+          { key: 'krr0' },
+          { key: 'krr1' },
+          { key: 'krr2' },
+          { key: 'krr3' },
+          { key: 'krr4' },
+          { key: 'krr5' }
+      ],
         frameRate: 10,
         repeat: -1
     });
   
     this.anims.create({
       key: 'attackRight',
-      frames: this.anims.generateFrameNumbers('knightAttackingRight', { start: 0, end: 21 }),
+      frames: [{ key: 'kar' }],
+      frameRate: 10,
+      repeat: -1
+    });  
+
+    this.anims.create({
+      key: 'attackLeft',
+      frames: [{ key: 'kal' }],
       frameRate: 10,
       repeat: -1
     });  
@@ -178,65 +217,45 @@ class SceneMain extends Phaser.Scene {
     //  Input Events
     cursors = this.input.keyboard.createCursorKeys();
     spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
   
     //  WOLVES
     wolves = this.physics.add.group({
       key: 'wolfStanding',
-      setXY: { x: 700, y: 0 }
+     // setXY: { x: 700, y: 0 }
     })
     wolves.setVelocityX(0);
   
     //  JUMP ITEM
     jumpItems = this.physics.add.group({
       key: 'jumpItem',
-      setXY: { x: 500, y: 0}
+      //setXY: { x: 500, y: 0}
     });  
   
     //  HEART ITEM
     heartItems = this.physics.add.group({
       key: 'heartItem',
-      setXY: { x: 400, y: 0}
+      setXY: { x: 300, y: 0}
     });
   
     //  STAR ITEM
     starItems = this.physics.add.group({
       key: 'starItem',
-      setXY: { x: 600, y: 0}
+      //setXY: { x: 600, y: 0}
     });  
   
     //  BULLET 
     bullets = this.physics.add.group({
       key: 'bullet',
-      setXY: { x: player.x, y: player.y}
+    });
+
+    //  LEFTBULLET 
+    leftBullets = this.physics.add.group({
+      key: 'bullet',
     });
 
 
-  
-  
-  
 
-
-
-
-
-
-
-  
-    //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
-    stars = this.physics.add.group({
-        key: 'star',
-        repeat: 2,
-        setXY: { x: 12, y: 0, stepX: 70 }
-    });
-  
-    stars.children.iterate(function (child) {
-  
-        //  Give each star a slightly different bounce
-        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-  
-    });
-  
-    bombs = this.physics.add.group();
   
     //  The score
     scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
@@ -247,13 +266,9 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(jumpItems, platforms);
     this.physics.add.collider(heartItems, platforms);
     this.physics.add.collider(starItems, platforms);
-    this.physics.add.collider(stars, platforms);
-    this.physics.add.collider(bombs, platforms);
+
   
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-    this.physics.add.overlap(player, stars, collectStar, null, this);
-  
-    this.physics.add.collider(player, bombs, hitBomb, null, this);
   
     this.physics.add.collider(player, jumpItems, activateSuperJump, null, this);
   
@@ -305,9 +320,18 @@ class SceneMain extends Phaser.Scene {
     }
   
     if (spaceKey.isDown) {
-      player.anims.play('right', false);
+      player.anims.play('attackRight', false);
       if (readyToShoot) {
-        bullets.add(this.physics.add.image(player.x + 38, player.y + 15, "bullet"));
+        bullets.add(this.physics.add.image(player.x + 28, player.y - 5, "bullet"));
+        readyToShoot = false;
+        setTimeout(function(){ readyToShoot = true; }, 500);
+      }        
+    }
+
+    if (aKey.isDown) {
+      player.anims.play('attackLeft', false);
+      if (readyToShoot) {
+        leftBullets.add(this.physics.add.image(player.x - 28, player.y - 5, "bullet"));
         readyToShoot = false;
         setTimeout(function(){ readyToShoot = true; }, 500);
       }        
@@ -335,6 +359,12 @@ class SceneMain extends Phaser.Scene {
 
     bullets.setVelocityX(500);
     bullets.children.iterate(function (bullet) {
+      bullet.body.allowGravity = false;
+      setTimeout(function(){ bullet.disableBody(true, true); }, 1500);
+    });
+
+    leftBullets.setVelocityX(-500);
+    leftBullets.children.iterate(function (bullet) {
       bullet.body.allowGravity = false;
       setTimeout(function(){ bullet.disableBody(true, true); }, 1500);
     });
@@ -452,42 +482,6 @@ const killWolf = (bullet, wolf) => {
   wolf.disableBody(true, true);
 }
 
-
-
-
-
-
-
-
-
-
-function collectStar (player, star)
-{
-  star.disableBody(true, true);
-
-  //  Add and update the score
-  score += 10;
-  scoreText.setText('Score: ' + score);
-
-  if (stars.countActive(true) === 0)
-  {
-      //  A new batch of stars to collect
-      stars.children.iterate(function (child) {
-
-          child.enableBody(true, child.x, 0, true, true);
-
-      });
-
-      var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-
-      var bomb = bombs.create(x, 16, 'bomb');
-      bomb.setBounce(1);
-      bomb.setCollideWorldBounds(true);
-      bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-      bomb.allowGravity = false;
-
-  }
-}
 
 function hitBomb (player, bomb)
 {
