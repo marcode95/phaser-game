@@ -158,9 +158,13 @@ class SceneMain extends Phaser.Scene {
       targets: movingPlattformOne.body.velocity,
       loop: -1,
       tweens: [
-        { x:    0, y: -120, duration: 1200, ease: 'Stepped' },
+        { x:    0, y: -120, duration: 900, ease: 'Stepped' },
+        { x:    0, y: -80, duration: 300, ease: 'Stepped' },
+        { x:    0, y: -40, duration: 300, ease: 'Stepped' },
         { x:    0, y:    0, duration: 800, ease: 'Stepped' },
-        { x:    0, y:  120, duration: 1200, ease: 'Stepped' },
+        { x:    0, y:  120, duration: 900, ease: 'Stepped' },
+        { x:    0, y:  80, duration: 300, ease: 'Stepped' },
+        { x:    0, y:  40, duration: 300, ease: 'Stepped' },
         { x:    0, y:    0, duration: 800, ease: 'Stepped' }
       ]
     });
@@ -171,6 +175,7 @@ class SceneMain extends Phaser.Scene {
     //  Player physics properties. Give the little guy a slight bounce.
     player.setCollideWorldBounds(false);
     player.setGravityY(300);
+    
   
     //  Our player animations, turning, walking left and walking right.
     this.anims.create({
@@ -405,10 +410,10 @@ class SceneMain extends Phaser.Scene {
 }
 
 const patrolPlatform = (wolf, platform) => {
-  if (wolf.body.velocity.x > 0 && wolf.x + wolf.width/2 > platform.x + platform.width/2) {
+  if (wolf.body.velocity.x > 0 && wolf.x + wolf.width > platform.x + platform.width) {
       wolf.body.velocity.x *= -1;
   }
-  else if (wolf.body.velocity.x < 0 && wolf.x - wolf.width/2 < platform.x - platform.width/2) {
+  else if (wolf.body.velocity.x < 0 && wolf.x - wolf.width < platform.x - platform.width) {
       wolf.body.velocity.x *= -1;
   }
 }
