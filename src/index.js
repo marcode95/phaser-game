@@ -26,6 +26,11 @@ import wolfStanding from './assets/wolfStanding.png';
 import wolfRunningRight from './assets/wolfRunningRight.png';
 import wolfRunningLeft from './assets/wolfRunningLeft.png';
 
+import golemStanding from './assets/golemStanding.png';
+import golemRunningRight from './assets/golemRunningRight.png';
+import golemRunningLeft from './assets/golemRunningLeft.png';
+import golemDying from './assets/golemDying.png';
+
 import knightRunningRight0 from './assets/Walk_01.png';
 import knightRunningRight1 from './assets/Walk_02.png';
 import knightRunningRight2 from './assets/Walk_03.png';
@@ -45,6 +50,7 @@ import knightAttackingLeft from './assets/Actionleft_16.png';
 
 var player;
 var wolves;
+var golems;
 var jumpItems;
 var heartItems;
 var starItems;
@@ -119,6 +125,11 @@ class SceneMain extends Phaser.Scene {
     this.load.spritesheet('wolfRunningRight', wolfRunningRight, { frameWidth: 128, frameHeight: 90 });
     this.load.spritesheet('wolfRunningLeft', wolfRunningLeft, { frameWidth: 128, frameHeight: 90 });
 
+    this.load.image('golemStanding', golemStanding, { frameWidth: 64, frameHeight: 90 });
+    this.load.spritesheet('golemRunningRight', golemRunningRight, { frameWidth: 192, frameHeight: 140 });
+    this.load.spritesheet('golemRunningLeft', golemRunningLeft, { frameWidth: 192, frameHeight: 140 });
+    this.load.spritesheet('golemDying', golemDying, { frameWidth: 64, frameHeight: 90 });
+
     this.load.image('heart', heart);
   }
 
@@ -167,6 +178,9 @@ class SceneMain extends Phaser.Scene {
     createGround(5570, 355, 'longGround', 1.5, 1);
     createGround(5955, 355, 'ground', 1.5, 2);
     createGround(5860, 600, 'ground', 1.5, 1);
+    createGround(6200, 600, 'ground', 1.5, 9);
+    createGround(6200, 500, 'ground', 1.5, 1);
+    createGround(6970, 500, 'ground', 1.5, 1);
 
     
 
@@ -227,7 +241,7 @@ class SceneMain extends Phaser.Scene {
 
   
     // The player and its settings
-    player = this.physics.add.sprite(0, 400, 'krr0');
+    player = this.physics.add.sprite(6500, 200, 'krr0');
   
     //  Player physics properties. Give the little guy a slight bounce.
     player.setCollideWorldBounds(false);
@@ -249,6 +263,12 @@ class SceneMain extends Phaser.Scene {
     })
     wolves.setVelocityX(150);
 
+    //  golems
+    golems = this.physics.add.group({
+      key: 'golemStanding',
+      setXY: { x: 6300, y: 0 }
+    })
+    golems.setVelocityX(100);
   
     //  JUMP ITEM
     jumpItems = this.physics.add.group({
@@ -321,6 +341,7 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(player, movingPlattformThree);
     this.physics.add.collider(coins, lava);
     this.physics.add.collider(jumpItem, lava);
+    this.physics.add.collider(golems, platforms);
 
   
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
@@ -409,6 +430,28 @@ class SceneMain extends Phaser.Scene {
         frameRate: 15,
         repeat: -1
       });
+
+      this.anims.create({
+        key: 'golemRight',
+        frames: this.anims.generateFrameNumbers('golemRunningRight', { start: 0, end: 6 }),
+        frameRate: 15,
+        repeat: -1
+      });
+    
+      this.anims.create({
+        key: 'golemLeft',
+        frames: this.anims.generateFrameNumbers('golemRunningLeft', { start: 0, end: 6 }),
+        frameRate: 15,
+        repeat: -1
+      });
+
+
+      this.anims.create({
+        key: 'golemDeath',
+        frames: this.anims.generateFrameNumbers('golemDying', { start: 0, end: 27 }),
+        frameRate: 15,
+        repeat: -1
+      });
   }
 
   update () {
@@ -484,6 +527,24 @@ class SceneMain extends Phaser.Scene {
         wolf.anims.play('wolfLeft', true);
       }
     });
+
+    golems.children.iterate(function (golem) {
+      if (golem.body.velocity.x > 0) {
+        golem.anims.play('golemRight', true);
+      }
+      if (golem.body.velocity.x < 0) {
+        golem.anims.play('golemLeft', true);
+      }
+      if ((Math.abs(golem.x - player.x)) < 1000) {    
+        if (player.x < golem.x && golem.body.velocity.x > 0) {
+            golem.body.velocity.x *= -1;
+        }
+        else if (player.x > golem.x && golem.body.velocity.x < 0) {
+            golem.body.velocity.x *= -1;
+        }
+      }
+    });
+    
 
     bullets.setVelocityX(500);
     bullets.children.iterate(function (bullet) {
