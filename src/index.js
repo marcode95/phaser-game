@@ -535,10 +535,16 @@ const createLava = (start, height, texture, scale, count) => {
   }
 }
 
+const superJumpText = document.getElementById('superjump-text');
+const progress = document.getElementById('progress');
+const items = document.getElementById('items');
+
 const activateSuperJump = (player, jumpItem) => {
   superJump = true;
   setTimeout(function(){ superJump = false; }, 8000);
   jumpItem.disableBody(true, true);
+  items.innerHTML = '<div id="superjump-text">Superjump!</div><div id="progress"><div class="bar"></div></div>'
+  setTimeout(function(){ items.innerHTML = ''; }, 8000);
 }
 
 const activateInvincibility = (time) => {

@@ -25,3 +25,47 @@ body {
   color: white;
   font-family: 'Courier New', Courier, monospace;
 }
+
+#progress{
+  position: absolute;
+  top: 135px;
+  left: 20px; 
+  height: 20px;
+  width: 150px;
+  display: flex;
+}
+
+#superjump-text {
+  position: absolute;
+  top: 100px;
+  left: 20px; 
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 20px;
+}
+
+.bar{
+  background-color: #ffffff;
+  width: 0px;
+  height: 100%;
+  border-radius: 15px;
+  animation: progres 8s infinite linear;    
+}
+
+@keyframes progres{
+  0%{
+    width: 100%;
+  }
+  25%{
+      width: 75%;
+  }
+  50%{
+      width: 50%;
+  }
+  75%{
+      width: 25%;
+  }
+  100%{
+      width: 0%;
+  }
+};
