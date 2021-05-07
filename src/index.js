@@ -143,13 +143,21 @@ class SceneMain extends Phaser.Scene {
     // platforms.create(32, 670, 'ground').setScale(1.5).refreshBody();
     // platforms.create(96, 670, 'ground').setScale(1.5).refreshBody();
     createGround(32, 670, 'ground', 1.5, 3);
+    createLava(322, 680, 'lavaTile', 1.5, 40);
     createGround(450, 570, 'ground', 1.5, 1);
-    createGround(650, 470, 'ground', 1.5, 1);
     createGround(400, 230, 'longGround', 1.5, 1);
-    
-    createLava(322, 680, 'lavaTile', 1.5, 20);
+    createGround(650, 470, 'ground', 1.5, 1);
+    createGround(650, 470, 'ground', 1.5, 1);
+    createGround(1080, 230, 'ground', 1.5, 4);
+    createGround(1700, 330, 'longGround', 1.5, 1);
+    createGround(2000, 600, 'ground', 1.5, 1);
+    createGround(2100, 220, 'ground', 1.5, 7);
+    createGround(2350, 600, 'ground', 1.5, 1);
+    createGround(2700, 600, 'ground', 1.5, 1);
+    createGround(2820, 400, 'ground', 1.5, 1);
+    createGround(3150, 230, 'longGround', 1.5, 1);
 
-  
+
     var movingPlattformOne = this.physics.add.image(850, 390, 'ground')
     .setImmovable(true)
     .setVelocity(100, -100);
@@ -170,78 +178,17 @@ class SceneMain extends Phaser.Scene {
         { x:    0, y:    0, duration: 800, ease: 'Stepped' }
       ]
     });
+
   
     // The player and its settings
-    player = this.physics.add.sprite(100, 450, 'krr0');
+    player = this.physics.add.sprite(2100, 0, 'krr0');
   
     //  Player physics properties. Give the little guy a slight bounce.
     player.setCollideWorldBounds(false);
     player.setGravityY(300);
     
   
-    //  Our player animations, turning, walking left and walking right.
-    this.anims.create({
-        key: 'left',
-        frames: [
-          { key: 'krl0' },
-          { key: 'krl1' },
-          { key: 'krl2' },
-          { key: 'krl3' },
-          { key: 'krl4' },
-          { key: 'krl5' }
-        ],
-        frameRate: 10,
-        repeat: -1
-    });
-  
-    this.anims.create({
-        key: 'turn',
-        frames: [{ key: 'krr0' }],
-        frameRate: 10,
-        repeat: -1
-    });
-  
-    this.anims.create({
-        key: 'right',
-        frames: [
-          { key: 'krr0' },
-          { key: 'krr1' },
-          { key: 'krr2' },
-          { key: 'krr3' },
-          { key: 'krr4' },
-          { key: 'krr5' }
-      ],
-        frameRate: 10,
-        repeat: -1
-    });
-  
-    this.anims.create({
-      key: 'attackRight',
-      frames: [{ key: 'kar' }],
-      frameRate: 10,
-      repeat: -1
-    });  
 
-    this.anims.create({
-      key: 'attackLeft',
-      frames: [{ key: 'kal' }],
-      frameRate: 10,
-      repeat: -1
-    });  
-  
-    this.anims.create({
-      key: 'wolfRight',
-      frames: this.anims.generateFrameNumbers('wolfRunningRight', { start: 0, end: 7 }),
-      frameRate: 15,
-      repeat: -1
-    });
-  
-    this.anims.create({
-      key: 'wolfLeft',
-      frames: this.anims.generateFrameNumbers('wolfRunningLeft', { start: 0, end: 7 }),
-      frameRate: 15,
-      repeat: -1
-    });
   
     //  Input Events
     cursors = this.input.keyboard.createCursorKeys();
@@ -251,14 +198,16 @@ class SceneMain extends Phaser.Scene {
     //  WOLVES
     wolves = this.physics.add.group({
       key: 'wolfStanding',
-      setXY: { x: 200, y: 120 }
+      repeat: 2,
+      setXY: { x: 200, y: 120, stepX: 1400 }
     })
     wolves.setVelocityX(150);
+
   
     //  JUMP ITEM
     jumpItems = this.physics.add.group({
       key: 'jumpItem',
-      //setXY: { x: 500, y: 0}
+      setXY: { x: 1900, y: 0}
     });  
   
     //  HEART ITEM
@@ -290,8 +239,15 @@ class SceneMain extends Phaser.Scene {
     //  COIN 
     coins = this.physics.add.group({
       key: 'coin',
-      setXY: { x: 200, y: 0}
+      setXY: { x: 200, y: 0},
     });
+
+    coins.add(this.physics.add.image(850, 0, "coin"));
+    coins.add(this.physics.add.image(1230, 0, "coin"));
+    coins.add(this.physics.add.image(2000, 0, "coin"));
+    coins.add(this.physics.add.image(2350, 400, "coin"));
+    coins.add(this.physics.add.image(2700, 400, "coin"));
+    
 
   
 
@@ -303,6 +259,7 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(starItems, platforms);
     this.physics.add.collider(coins, platforms);
     this.physics.add.collider(player, movingPlattformOne);
+    this.physics.add.collider(coins, movingPlattformOne);
 
   
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
@@ -326,7 +283,71 @@ class SceneMain extends Phaser.Scene {
 
 
 
-    this.cameras.main.setBounds(0, 0, 3000);
+    this.cameras.main.setBounds(0, 0, 6000);
+
+        //  Our player animations, turning, walking left and walking right.
+        this.anims.create({
+          key: 'left',
+          frames: [
+            { key: 'krl0' },
+            { key: 'krl1' },
+            { key: 'krl2' },
+            { key: 'krl3' },
+            { key: 'krl4' },
+            { key: 'krl5' }
+          ],
+          frameRate: 10,
+          repeat: -1
+      });
+    
+      this.anims.create({
+          key: 'turn',
+          frames: [{ key: 'krr0' }],
+          frameRate: 10,
+          repeat: -1
+      });
+    
+      this.anims.create({
+          key: 'right',
+          frames: [
+            { key: 'krr0' },
+            { key: 'krr1' },
+            { key: 'krr2' },
+            { key: 'krr3' },
+            { key: 'krr4' },
+            { key: 'krr5' }
+        ],
+          frameRate: 10,
+          repeat: -1
+      });
+    
+      this.anims.create({
+        key: 'attackRight',
+        frames: [{ key: 'kar' }],
+        frameRate: 10,
+        repeat: -1
+      });  
+  
+      this.anims.create({
+        key: 'attackLeft',
+        frames: [{ key: 'kal' }],
+        frameRate: 10,
+        repeat: -1
+      });  
+    
+      this.anims.create({
+        key: 'wolfRight',
+        frames: this.anims.generateFrameNumbers('wolfRunningRight', { start: 0, end: 7 }),
+        frameRate: 15,
+        repeat: -1
+      });
+    
+      this.anims.create({
+        key: 'wolfLeft',
+        frames: this.anims.generateFrameNumbers('wolfRunningLeft', { start: 0, end: 7 }),
+        frameRate: 15,
+        repeat: -1
+      });
   }
 
   update () {
@@ -390,7 +411,7 @@ class SceneMain extends Phaser.Scene {
         player.setVelocityY(-370);
       }
       else if (superJump === true) {
-        player.setVelocityY(-470);      
+        player.setVelocityY(-550);      
       }
     }
   
@@ -546,6 +567,9 @@ const activateInvincibilityItem = (player, starItem) => {
 
 const killWolf = (bullet, wolf) => {
   wolf.disableBody(true, true);
+  bullet.disableBody(true, true);
+  score = score + 50;
+  updateScore();
 }
 
 const addCoins = (player, coin) => {
