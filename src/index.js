@@ -163,7 +163,12 @@ class SceneMain extends Phaser.Scene {
     createGround(4570, 390, 'ground', 1, 1);
     createGround(4700, 280, 'ground', 1, 1);
     createGround(4830, 390, 'ground', 1, 1);
+    createGround(5200, 450, 'ground', 1, 1);
+    createGround(5570, 355, 'longGround', 1.5, 1);
+    createGround(5955, 355, 'ground', 1.5, 2);
+    createGround(5860, 600, 'ground', 1.5, 1);
 
+    
 
     var movingPlattformOne = this.physics.add.image(850, 390, 'ground')
     .setImmovable(true)
@@ -222,7 +227,7 @@ class SceneMain extends Phaser.Scene {
 
   
     // The player and its settings
-    player = this.physics.add.sprite(0, 450, 'krr0');
+    player = this.physics.add.sprite(0, 400, 'krr0');
   
     //  Player physics properties. Give the little guy a slight bounce.
     player.setCollideWorldBounds(false);
@@ -249,7 +254,9 @@ class SceneMain extends Phaser.Scene {
     jumpItems = this.physics.add.group({
       key: 'jumpItem',
       setXY: { x: 1900, y: 0}
-    });  
+    }); 
+
+    jumpItems.add(this.physics.add.image(5860, 500, "jumpItem"));
   
     //  HEART ITEM
     heartItems = this.physics.add.group({
@@ -260,7 +267,7 @@ class SceneMain extends Phaser.Scene {
     //  STAR ITEM
     starItems = this.physics.add.group({
       key: 'starItem',
-      //setXY: { x: 600, y: 0}
+      setXY: { x: 5400, y: 250}
     });  
   
     //  BULLET 
@@ -293,6 +300,10 @@ class SceneMain extends Phaser.Scene {
     coins.add(this.physics.add.image(3930, 300, "coin"));
     coins.add(this.physics.add.image(4570, 300, "coin"));
     coins.add(this.physics.add.image(4830, 300, "coin"));
+    coins.add(this.physics.add.image(4830, 300, "coin"));
+    coins.add(this.physics.add.image(5400, 500, "coin"));
+    coins.add(this.physics.add.image(5500, 500, "coin"));
+    coins.add(this.physics.add.image(5600, 500, "coin"));
     
 
   
@@ -308,6 +319,8 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(coins, movingPlattformOne);
     this.physics.add.collider(player, movingPlattformTwo);
     this.physics.add.collider(player, movingPlattformThree);
+    this.physics.add.collider(coins, lava);
+    this.physics.add.collider(jumpItem, lava);
 
   
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
@@ -331,7 +344,7 @@ class SceneMain extends Phaser.Scene {
 
 
 
-    this.cameras.main.setBounds(0, 0, 6000);
+    this.cameras.main.setBounds(0, 0, 10000);
 
         //  Our player animations, turning, walking left and walking right.
         this.anims.create({
@@ -583,16 +596,15 @@ const createLava = (start, height, texture, scale, count) => {
   }
 }
 
-const superJumpText = document.getElementById('superjump-text');
-const progress = document.getElementById('progress');
-const items = document.getElementById('items');
+
+const jumpItemField = document.getElementById('jump-item-field');
 
 const activateSuperJump = (player, jumpItem) => {
   superJump = true;
   setTimeout(function(){ superJump = false; }, 8000);
   jumpItem.disableBody(true, true);
-  items.innerHTML = '<div id="superjump-text">Superjump!</div><div id="progress"><div class="bar"></div></div>'
-  setTimeout(function(){ items.innerHTML = ''; }, 8000);
+  jumpItemField.innerHTML = '<div id="superjump-text">Superjump!</div><div id="progress"><div class="bar"></div></div>'
+  setTimeout(function(){ jumpItemField.innerHTML = ''; }, 8000);
 }
 
 const activateInvincibility = (time) => {
@@ -614,9 +626,14 @@ const addHeart = (player, heartItem) => {
   heartItem.disableBody(true, true);
 }
 
+const starItemField = document.getElementById('star-item-field');
+starItemField.setAttribute('style','position: absolute; top: 173px; left: 20px;')
+console.log(starItemField)
 const activateInvincibilityItem = (player, starItem) => {
   activateInvincibility(8000);
   starItem.disableBody(true, true);
+  starItemField.innerHTML = '<div id="star-text">Invincible!</div><div id="star-progress"><div class="star-bar"></div></div>'
+  setTimeout(function(){ starItemField.innerHTML = ''; }, 8000);
 }
 
 const killWolf = (bullet, wolf) => {
