@@ -48,6 +48,7 @@ var wolves;
 var jumpItems;
 var heartItems;
 var starItems;
+var coins;
 var bullets;
 var leftBullets;
 var platforms;
@@ -56,7 +57,6 @@ var cursors;
 var spaceKey
 var score = 0;
 var gameOver = false;
-var scoreText;
 let invincible = false;
 let superJump = false;
 let readyToShoot = true;
@@ -288,21 +288,20 @@ class SceneMain extends Phaser.Scene {
     createLoop(this, 4, 'glowworm3', 1.50);
 
     //  COIN 
-    coin = this.physics.add.group({
+    coins = this.physics.add.group({
       key: 'coin',
       setXY: { x: 200, y: 0}
     });
 
   
-    //  The score
-    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
+
   
     //  Collide the player and the stars with the platforms
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(jumpItems, platforms);
     this.physics.add.collider(heartItems, platforms);
     this.physics.add.collider(starItems, platforms);
-    this.physics.add.collider(coin, platforms);
+    this.physics.add.collider(coins, platforms);
     this.physics.add.collider(player, movingPlattformOne);
 
   
@@ -321,6 +320,9 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(leftBullets, wolves, killWolf, null, this);
   
     this.physics.add.collider(player, lava, looseHeart, null, this);
+
+    this.physics.add.collider(player, coins, addCoins, null, this);
+
 
 
 
@@ -544,6 +546,17 @@ const activateInvincibilityItem = (player, starItem) => {
 
 const killWolf = (bullet, wolf) => {
   wolf.disableBody(true, true);
+}
+
+const addCoins = (player, coin) => {
+  score = score + 50;
+  updateScore();
+  coin.disableBody(true, true);
+}
+
+const scoreField = document.getElementById('score-field');
+const updateScore = () => {
+  scoreField.innerHTML = 'Score: ' + score;
 }
 
 
