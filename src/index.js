@@ -125,12 +125,12 @@ class SceneMain extends Phaser.Scene {
   create () {
     //  A simple background for our game
     this.add.image(600, 337.5, 'sky').setScrollFactor(0);
-    createLoop(this, 4, 'trees4', 0.2);
-    createLoop(this, 4, 'trees2', 0.4);
-    createLoop(this, 4, 'trees1', 0.6);
-    createLoop(this, 4, 'trees3', 0.8);
-    createLoop(this, 4, 'stones', 1);
-    createLoop(this, 4, 'glowworm4', 1);
+    createLoop(this, 6, 'trees4', 0.2);
+    createLoop(this, 6, 'trees2', 0.4);
+    createLoop(this, 6, 'trees1', 0.6);
+    createLoop(this, 6, 'trees3', 0.8);
+    createLoop(this, 6, 'stones', 1);
+    createLoop(this, 6, 'glowworm4', 1);
 
   
   
@@ -143,7 +143,7 @@ class SceneMain extends Phaser.Scene {
     // platforms.create(32, 670, 'ground').setScale(1.5).refreshBody();
     // platforms.create(96, 670, 'ground').setScale(1.5).refreshBody();
     createGround(32, 670, 'ground', 1.5, 3);
-    createLava(322, 680, 'lavaTile', 1.5, 40);
+    createLava(322, 680, 'lavaTile', 1.5, 60);
     createGround(450, 570, 'ground', 1.5, 1);
     createGround(400, 230, 'longGround', 1.5, 1);
     createGround(650, 470, 'ground', 1.5, 1);
@@ -156,6 +156,13 @@ class SceneMain extends Phaser.Scene {
     createGround(2700, 600, 'ground', 1.5, 1);
     createGround(2820, 400, 'ground', 1.5, 1);
     createGround(3150, 230, 'longGround', 1.5, 1);
+    createGround(3670, 390, 'ground', 1, 1);
+    createGround(3800, 280, 'ground', 1, 1);
+    createGround(3930, 390, 'ground', 1, 1);
+    createGround(4250, 440, 'ground', 1, 1);
+    createGround(4570, 390, 'ground', 1, 1);
+    createGround(4700, 280, 'ground', 1, 1);
+    createGround(4830, 390, 'ground', 1, 1);
 
 
     var movingPlattformOne = this.physics.add.image(850, 390, 'ground')
@@ -179,9 +186,43 @@ class SceneMain extends Phaser.Scene {
       ]
     });
 
+    var movingPlattformTwo = this.physics.add.image(3500, 500, 'ground')
+    .setImmovable(true)
+    .setVelocity(100, -100);
+
+    movingPlattformTwo.body.setAllowGravity(false);
+    
+    this.tweens.timeline({
+      targets: movingPlattformTwo.body.velocity,
+      loop: -1,
+      tweens: [
+        { x:    150, y: 0, duration: 4200, ease: 'Stepped' },
+        { x:    0, y: 0, duration: 2300, ease: 'Stepped' },
+        { x:    -150, y: 0, duration: 4200, ease: 'Stepped' },
+        { x:    0, y: 0, duration: 2300, ease: 'Stepped' },
+      ]
+    });
+
+    var movingPlattformThree = this.physics.add.image(5000, 500, 'ground')
+    .setImmovable(true)
+    .setVelocity(100, -100);
+
+    movingPlattformThree.body.setAllowGravity(false);
+    
+    this.tweens.timeline({
+      targets: movingPlattformThree.body.velocity,
+      loop: -1,
+      tweens: [
+        { x:    -150, y: 0, duration: 4200, ease: 'Stepped' },
+        { x:    0, y: 0, duration: 2300, ease: 'Stepped' },
+        { x:    150, y: 0, duration: 4200, ease: 'Stepped' },
+        { x:    0, y: 0, duration: 2300, ease: 'Stepped' },
+      ]
+    });
+
   
     // The player and its settings
-    player = this.physics.add.sprite(2100, 0, 'krr0');
+    player = this.physics.add.sprite(0, 450, 'krr0');
   
     //  Player physics properties. Give the little guy a slight bounce.
     player.setCollideWorldBounds(false);
@@ -213,7 +254,7 @@ class SceneMain extends Phaser.Scene {
     //  HEART ITEM
     heartItems = this.physics.add.group({
       key: 'heartItem',
-      // setXY: { x: 300, y: 0}
+      setXY: { x: 4700, y: 200}
     });
   
     //  STAR ITEM
@@ -247,6 +288,11 @@ class SceneMain extends Phaser.Scene {
     coins.add(this.physics.add.image(2000, 0, "coin"));
     coins.add(this.physics.add.image(2350, 400, "coin"));
     coins.add(this.physics.add.image(2700, 400, "coin"));
+    coins.add(this.physics.add.image(3670, 300, "coin"));
+    coins.add(this.physics.add.image(3800, 200, "coin"));
+    coins.add(this.physics.add.image(3930, 300, "coin"));
+    coins.add(this.physics.add.image(4570, 300, "coin"));
+    coins.add(this.physics.add.image(4830, 300, "coin"));
     
 
   
@@ -260,6 +306,8 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(coins, platforms);
     this.physics.add.collider(player, movingPlattformOne);
     this.physics.add.collider(coins, movingPlattformOne);
+    this.physics.add.collider(player, movingPlattformTwo);
+    this.physics.add.collider(player, movingPlattformThree);
 
   
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
