@@ -128,8 +128,8 @@ class SceneMain extends Phaser.Scene {
     this.load.spritesheet('wolfRunningLeft', wolfRunningLeft, { frameWidth: 128, frameHeight: 90 });
 
     this.load.image('golemStanding', golemStanding, { frameWidth: 64, frameHeight: 90 });
-    this.load.spritesheet('golemRunningRight', golemRunningRight, { frameWidth: 192, frameHeight: 140 });
-    this.load.spritesheet('golemRunningLeft', golemRunningLeft, { frameWidth: 192, frameHeight: 140 });
+    this.load.spritesheet('golemRunningRight', golemRunningRight, { frameWidth: 192, frameHeight: 130 });
+    this.load.spritesheet('golemRunningLeft', golemRunningLeft, { frameWidth: 192, frameHeight: 130 });
     this.load.spritesheet('golemDying', golemDying, { frameWidth: 192, frameHeight: 140 });
 
     this.load.image('heart', heart);
@@ -151,10 +151,10 @@ class SceneMain extends Phaser.Scene {
     platforms = this.physics.add.staticGroup();
     lava = this.physics.add.staticGroup();
     golemFreeGround = this.physics.add.staticGroup();
-    golemFreeGround.create(7300, 490, 'ground').setScale(1.5).refreshBody();
-    golemFreeGround.create(7870, 490, 'ground').setScale(1.5).refreshBody();
-    golemFreeGround.create(7200, 390, 'ground').setScale(1.5).refreshBody();
-    golemFreeGround.create(7970, 390, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(7300, 470, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(7870, 470, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(7200, 380, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(7970, 380, 'ground').setScale(1.5).refreshBody();
 
     //  Here we create the ground.
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
@@ -561,14 +561,13 @@ class SceneMain extends Phaser.Scene {
           golem.body.velocity.x = 100;
         }
       }
+      if (golemHealth <= 0) {
+        golem.body.velocity.x = 0;
+        player.body.velocity.x = 0;
+        golem.anims.play('golemDeath');      
+        gameOver = true;
+      }
     });
-
-    if (golemHealth <= 0) {
-      golem.body.velocity.x = 0;
-      player.body.velocity.x = 0;
-      golem.anims.play('golemDeath');      
-      gameOver = true;
-    }
 
     bullets.setVelocityX(500);
     bullets.children.iterate(function (bullet) {
@@ -589,6 +588,7 @@ class SceneMain extends Phaser.Scene {
       golemText.classList.remove('display-none');
       golemHealthBar.classList.add('display-block');
       golemText.classList.add('display-block');
+      normalJumpHeight = -410;
     }
   }
 }
@@ -748,10 +748,10 @@ const golemText = document.getElementById('golem-text');
 golemText.setAttribute('style','position: absolute; top: 30px; left: 680px; color: white; font-family: "Courier New", Courier, monospace;')
 
 const hurtGolem = (bullet, golem) => {
-  golemHealth = golemHealth - 1;
   bullet.disableBody(true, true);
-  golems.setVelocityX(0);
-  console.log(golemHealth)
+  golemHealth = golemHealth - 1;
+  let golemHealthBarLength = 400*(golemHealth/25);  
+  golemHealthBar.style.width = golemHealthBarLength + 'px'
 }
 
 const scoreField = document.getElementById('score-field');
