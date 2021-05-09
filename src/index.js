@@ -584,6 +584,12 @@ class SceneMain extends Phaser.Scene {
 
     this.physics.add.collider(wolves, platforms, patrolPlatform, null, this);
 
+    if (player.x > 7000) {
+      golemHealthBar.classList.remove('display-none');
+      golemText.classList.remove('display-none');
+      golemHealthBar.classList.add('display-block');
+      golemText.classList.add('display-block');
+    }
   }
 }
 

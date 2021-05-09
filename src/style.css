@@ -126,3 +126,11 @@ body {
   height: 15px;
   background-color: red;
 }
+
+.display-block {
+  display: block;
+}
+
+.display-none {
+  display: none;
+}
