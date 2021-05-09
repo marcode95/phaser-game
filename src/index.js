@@ -70,6 +70,7 @@ let superJump = false;
 let readyToShoot = true;
 var aKey;
 let normalJumpHeight = -370;
+let heartSubtracted = false;
 
 class SceneMainMenu extends Phaser.Scene {
   constructor() {
@@ -567,7 +568,7 @@ class SceneMain extends Phaser.Scene {
         golem.body.velocity.x = 0;
         player.body.velocity.x = 0;
         golem.anims.play('golemDeath');
-        score = score + (150 - timeCount) + 200;
+        score = score + (250 - timeCount) + 200;
         updateScore();
         clearInterval(timeCounter);
         gameOver = true;
@@ -594,8 +595,15 @@ class SceneMain extends Phaser.Scene {
       golemHealthBar.classList.add('display-block');
       golemText.classList.add('display-block');
       normalJumpHeight = -410;
-      hearts = 1;
-      updateHealthBar();
+      if (heartSubtracted === false) {
+        hearts = 1;
+        updateHealthBar();
+        heartSubtracted = true;
+      }
+    }
+
+    if (hearts === 0) {
+      gameOver = true;
     }
   }
 }
