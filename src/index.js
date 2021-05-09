@@ -171,9 +171,9 @@ class SceneMain extends Phaser.Scene {
     createGround(2000, 600, 'ground', 1.5, 1);
     createGround(2100, 220, 'ground', 1.5, 7);
     createGround(2350, 600, 'ground', 1.5, 1);
-    createGround(2700, 600, 'ground', 1.5, 1);
-    createGround(2820, 400, 'ground', 1.5, 1);
-    createGround(3150, 230, 'longGround', 1.5, 1);
+    createGround(2675, 600, 'ground', 1.5, 1);
+    createGround(2780, 400, 'ground', 1.5, 1);
+    createGround(3080, 230, 'longGround', 1.5, 1);
     createGround(3670, 390, 'ground', 1, 1);
     createGround(3800, 280, 'ground', 1, 1);
     createGround(3930, 390, 'ground', 1, 1);
@@ -249,7 +249,7 @@ class SceneMain extends Phaser.Scene {
 
   
     // The player and its settings
-    player = this.physics.add.sprite(6800, 0, 'krr0');
+    player = this.physics.add.sprite(6900, 0, 'krr0');
   
     //  Player physics properties. Give the little guy a slight bounce.
     player.setCollideWorldBounds(false);
@@ -289,7 +289,7 @@ class SceneMain extends Phaser.Scene {
     //  HEART ITEM
     heartItems = this.physics.add.group({
       key: 'heartItem',
-      setXY: { x: 4700, y: 200}
+      setXY: { x: 2675, y: 400}
     });
   
     //  STAR ITEM
@@ -319,7 +319,6 @@ class SceneMain extends Phaser.Scene {
     coins.add(this.physics.add.image(1230, 0, "coin"));
     coins.add(this.physics.add.image(2000, 0, "coin"));
     coins.add(this.physics.add.image(2350, 400, "coin"));
-    coins.add(this.physics.add.image(2700, 400, "coin"));
     coins.add(this.physics.add.image(3670, 300, "coin"));
     coins.add(this.physics.add.image(3800, 200, "coin"));
     coins.add(this.physics.add.image(3930, 300, "coin"));
@@ -329,6 +328,7 @@ class SceneMain extends Phaser.Scene {
     coins.add(this.physics.add.image(5400, 500, "coin"));
     coins.add(this.physics.add.image(5500, 500, "coin"));
     coins.add(this.physics.add.image(5600, 500, "coin"));
+    coins.add(this.physics.add.image(4700, 200, "coin"));
     
     createLoop(this, 4, 'glowworm1', 1.50);
     createLoop(this, 4, 'glowworm2', 1.50);
@@ -374,6 +374,8 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(player, lava, looseHeart, null, this);
 
     this.physics.add.collider(player, coins, addCoins, null, this);
+
+    this.physics.add.collider(player, golems, looseHeart, null, this);
 
 
 
@@ -564,7 +566,10 @@ class SceneMain extends Phaser.Scene {
       if (golemHealth <= 0) {
         golem.body.velocity.x = 0;
         player.body.velocity.x = 0;
-        golem.anims.play('golemDeath');      
+        golem.anims.play('golemDeath');
+        score = score + (150 - timeCount) + 200;
+        updateScore();
+        clearInterval(timeCounter);
         gameOver = true;
       }
     });
@@ -589,6 +594,8 @@ class SceneMain extends Phaser.Scene {
       golemHealthBar.classList.add('display-block');
       golemText.classList.add('display-block');
       normalJumpHeight = -410;
+      hearts = 1;
+      updateHealthBar();
     }
   }
 }
@@ -718,7 +725,7 @@ const addHeart = (player, heartItem) => {
 }
 
 const starItemField = document.getElementById('star-item-field');
-starItemField.setAttribute('style','position: absolute; top: 173px; left: 20px;')
+starItemField.setAttribute('style','position: absolute; top: 223px; left: 20px;')
 console.log(starItemField)
 const activateInvincibilityItem = (player, starItem) => {
   activateInvincibility(8000);
@@ -759,6 +766,14 @@ const updateScore = () => {
   scoreField.innerHTML = 'Score: ' + score;
 }
 
+const time = document.getElementById('time');
+let timeCount = 0;
+const clock = () => {
+  timeCount = timeCount + 1;
+  time.innerHTML = 'Time:  ' + timeCount;
+}
+
+const timeCounter = setInterval(clock, 1000);
 
 function hitBomb (player, bomb)
 {
