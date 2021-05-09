@@ -51,6 +51,8 @@ import knightAttackingLeft from './assets/Actionleft_16.png';
 var player;
 var wolves;
 var golems;
+var golemFreeGround;
+var golemHealth = 20;
 var jumpItems;
 var heartItems;
 var starItems;
@@ -128,7 +130,7 @@ class SceneMain extends Phaser.Scene {
     this.load.image('golemStanding', golemStanding, { frameWidth: 64, frameHeight: 90 });
     this.load.spritesheet('golemRunningRight', golemRunningRight, { frameWidth: 192, frameHeight: 140 });
     this.load.spritesheet('golemRunningLeft', golemRunningLeft, { frameWidth: 192, frameHeight: 140 });
-    this.load.spritesheet('golemDying', golemDying, { frameWidth: 64, frameHeight: 90 });
+    this.load.spritesheet('golemDying', golemDying, { frameWidth: 192, frameHeight: 140 });
 
     this.load.image('heart', heart);
   }
@@ -148,7 +150,12 @@ class SceneMain extends Phaser.Scene {
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = this.physics.add.staticGroup();
     lava = this.physics.add.staticGroup();
-    
+    golemFreeGround = this.physics.add.staticGroup();
+    golemFreeGround.create(6300, 490, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(6870, 490, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(6200, 390, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(6970, 390, 'ground').setScale(1.5).refreshBody();
+
     //  Here we create the ground.
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
     // platforms.create(32, 670, 'ground').setScale(1.5).refreshBody();
@@ -179,8 +186,7 @@ class SceneMain extends Phaser.Scene {
     createGround(5955, 355, 'ground', 1.5, 2);
     createGround(5860, 600, 'ground', 1.5, 1);
     createGround(6200, 600, 'ground', 1.5, 9);
-    createGround(6200, 500, 'ground', 1.5, 1);
-    createGround(6970, 500, 'ground', 1.5, 1);
+
 
     
 
@@ -342,6 +348,7 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(coins, lava);
     this.physics.add.collider(jumpItem, lava);
     this.physics.add.collider(golems, platforms);
+    this.physics.add.collider(player, golemFreeGround);
 
   
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
@@ -357,6 +364,10 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(bullets, wolves, killWolf, null, this);
 
     this.physics.add.collider(leftBullets, wolves, killWolf, null, this);
+
+    this.physics.add.collider(bullets, golems, hurtGolemLeft, null, this);
+
+    this.physics.add.collider(leftBullets, golems, hurtGolemLeft, null, this);
   
     this.physics.add.collider(player, lava, looseHeart, null, this);
 
@@ -535,15 +546,25 @@ class SceneMain extends Phaser.Scene {
       if (golem.body.velocity.x < 0) {
         golem.anims.play('golemLeft', true);
       }
-      if ((Math.abs(golem.x - player.x)) < 1000) {    
-        if (player.x < golem.x && golem.body.velocity.x > 0) {
-            golem.body.velocity.x *= -1;
+      if (golem.body.velocity.x === 0) {
+        golem.anims.play('golemStanding', true);
+      }
+      if ((Math.abs(golem.x - player.x)) < 1000) {
+        if ((Math.abs(golem.x - player.x)) < 20) {
+          golem.body.velocity.x = 0;
         }
-        else if (player.x > golem.x && golem.body.velocity.x < 0) {
-            golem.body.velocity.x *= -1;
+        else if (player.x < golem.x && golem.body.velocity.x >= 0) {
+          golem.body.velocity.x = -100;
+        }
+        else if (player.x > golem.x && golem.body.velocity.x <= 0) {
+          golem.body.velocity.x = 100;
         }
       }
+      if (golemHealth === 0) {
+        golem.anims.play('golemDeath');
+      }
     });
+
     
 
     bullets.setVelocityX(500);
@@ -708,6 +729,13 @@ const addCoins = (player, coin) => {
   score = score + 50;
   updateScore();
   coin.disableBody(true, true);
+}
+
+const hurtGolemLeft = (bullet, golem) => {
+  golemHealth = golemHealth - 5;
+  bullet.disableBody(true, true);
+  golems.setVelocityX(0);
+  console.log(golemHealth)
 }
 
 const scoreField = document.getElementById('score-field');
