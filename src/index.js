@@ -560,8 +560,10 @@ class SceneMain extends Phaser.Scene {
           golem.body.velocity.x = 100;
         }
       }
-      if (golemHealth === 0) {
-        golem.anims.play('golemDeath');
+      if (golemHealth <= 0) {
+        golem.body.velocity.x = 0;
+        golem.anims.play('golemDeath');      
+        gameOver = true;
       }
     });
 
