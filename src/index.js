@@ -52,7 +52,7 @@ var player;
 var wolves;
 var golems;
 var golemFreeGround;
-var golemHealth = 20;
+var golemHealth = 25;
 var jumpItems;
 var heartItems;
 var starItems;
@@ -69,7 +69,7 @@ let invincible = false;
 let superJump = false;
 let readyToShoot = true;
 var aKey;
-
+let normalJumpHeight = -370;
 
 class SceneMainMenu extends Phaser.Scene {
   constructor() {
@@ -138,12 +138,12 @@ class SceneMain extends Phaser.Scene {
   create () {
     //  A simple background for our game
     this.add.image(600, 337.5, 'sky').setScrollFactor(0);
-    createLoop(this, 6, 'trees4', 0.2);
-    createLoop(this, 6, 'trees2', 0.4);
-    createLoop(this, 6, 'trees1', 0.6);
-    createLoop(this, 6, 'trees3', 0.8);
-    createLoop(this, 6, 'stones', 1);
-    createLoop(this, 6, 'glowworm4', 1);
+    createLoop(this, 9, 'trees4', 0.2);
+    createLoop(this, 9, 'trees2', 0.4);
+    createLoop(this, 9, 'trees1', 0.8);
+    createLoop(this, 9, 'trees3', 0.8);
+    createLoop(this, 9, 'stones', 1);
+    createLoop(this, 9, 'glowworm4', 1);
 
   
   
@@ -151,17 +151,17 @@ class SceneMain extends Phaser.Scene {
     platforms = this.physics.add.staticGroup();
     lava = this.physics.add.staticGroup();
     golemFreeGround = this.physics.add.staticGroup();
-    golemFreeGround.create(6300, 490, 'ground').setScale(1.5).refreshBody();
-    golemFreeGround.create(6870, 490, 'ground').setScale(1.5).refreshBody();
-    golemFreeGround.create(6200, 390, 'ground').setScale(1.5).refreshBody();
-    golemFreeGround.create(6970, 390, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(7300, 490, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(7870, 490, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(7200, 390, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(7970, 390, 'ground').setScale(1.5).refreshBody();
 
     //  Here we create the ground.
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
     // platforms.create(32, 670, 'ground').setScale(1.5).refreshBody();
     // platforms.create(96, 670, 'ground').setScale(1.5).refreshBody();
     createGround(32, 670, 'ground', 1.5, 3);
-    createLava(322, 680, 'lavaTile', 1.5, 60);
+    createLava(322, 680, 'lavaTile', 1.5, 100);
     createGround(450, 570, 'ground', 1.5, 1);
     createGround(400, 230, 'longGround', 1.5, 1);
     createGround(650, 470, 'ground', 1.5, 1);
@@ -183,9 +183,11 @@ class SceneMain extends Phaser.Scene {
     createGround(4830, 390, 'ground', 1, 1);
     createGround(5200, 450, 'ground', 1, 1);
     createGround(5570, 355, 'longGround', 1.5, 1);
-    createGround(5955, 355, 'ground', 1.5, 2);
+    createGround(5955, 355, 'ground', 1.5, 6);
+    createGround(6450, 277, 'ground', 1.5, 3);
+    createGround(6650, 200, 'ground', 1.5, 3);
     createGround(5860, 600, 'ground', 1.5, 1);
-    createGround(6200, 600, 'ground', 1.5, 9);
+    createGround(7150, 600, 'ground', 1.5, 10);
 
 
     
@@ -247,7 +249,7 @@ class SceneMain extends Phaser.Scene {
 
   
     // The player and its settings
-    player = this.physics.add.sprite(6500, 200, 'krr0');
+    player = this.physics.add.sprite(6800, 0, 'krr0');
   
     //  Player physics properties. Give the little guy a slight bounce.
     player.setCollideWorldBounds(false);
@@ -272,9 +274,9 @@ class SceneMain extends Phaser.Scene {
     //  golems
     golems = this.physics.add.group({
       key: 'golemStanding',
-      setXY: { x: 6300, y: 0 }
+      setXY: { x: 7900, y: 0 }
     })
-    golems.setVelocityX(100);
+    golems.setVelocityX(0.00000001);
   
     //  JUMP ITEM
     jumpItems = this.physics.add.group({
@@ -306,9 +308,6 @@ class SceneMain extends Phaser.Scene {
       key: 'bullet',
     });
 
-    createLoop(this, 4, 'glowworm1', 1.50);
-    createLoop(this, 4, 'glowworm2', 1.50);
-    createLoop(this, 4, 'glowworm3', 1.50);
 
     //  COIN 
     coins = this.physics.add.group({
@@ -331,7 +330,9 @@ class SceneMain extends Phaser.Scene {
     coins.add(this.physics.add.image(5500, 500, "coin"));
     coins.add(this.physics.add.image(5600, 500, "coin"));
     
-
+    createLoop(this, 4, 'glowworm1', 1.50);
+    createLoop(this, 4, 'glowworm2', 1.50);
+    createLoop(this, 4, 'glowworm3', 1.50);
   
 
   
@@ -348,6 +349,7 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(coins, lava);
     this.physics.add.collider(jumpItem, lava);
     this.physics.add.collider(golems, platforms);
+    this.physics.add.collider(golems, lava);
     this.physics.add.collider(player, golemFreeGround);
 
   
@@ -365,9 +367,9 @@ class SceneMain extends Phaser.Scene {
 
     this.physics.add.collider(leftBullets, wolves, killWolf, null, this);
 
-    this.physics.add.collider(bullets, golems, hurtGolemLeft, null, this);
+    this.physics.add.collider(bullets, golems, hurtGolem, null, this);
 
-    this.physics.add.collider(leftBullets, golems, hurtGolemLeft, null, this);
+    this.physics.add.collider(leftBullets, golems, hurtGolem, null, this);
   
     this.physics.add.collider(player, lava, looseHeart, null, this);
 
@@ -460,8 +462,7 @@ class SceneMain extends Phaser.Scene {
       this.anims.create({
         key: 'golemDeath',
         frames: this.anims.generateFrameNumbers('golemDying', { start: 0, end: 27 }),
-        frameRate: 15,
-        repeat: -1
+        frameRate: 10,
       });
   }
 
@@ -523,7 +524,7 @@ class SceneMain extends Phaser.Scene {
   
     if (cursors.up.isDown && player.body.touching.down) { 
       if (superJump === false) {
-        player.setVelocityY(-370);
+        player.setVelocityY(normalJumpHeight);
       }
       else if (superJump === true) {
         player.setVelocityY(-550);      
@@ -549,7 +550,7 @@ class SceneMain extends Phaser.Scene {
       if (golem.body.velocity.x === 0) {
         golem.anims.play('golemStanding', true);
       }
-      if ((Math.abs(golem.x - player.x)) < 1000) {
+      if ((Math.abs(golem.x - player.x)) < 800) {
         if ((Math.abs(golem.x - player.x)) < 20) {
           golem.body.velocity.x = 0;
         }
@@ -560,14 +561,14 @@ class SceneMain extends Phaser.Scene {
           golem.body.velocity.x = 100;
         }
       }
-      if (golemHealth <= 0) {
-        golem.body.velocity.x = 0;
-        golem.anims.play('golemDeath');      
-        gameOver = true;
-      }
     });
 
-    
+    if (golemHealth <= 0) {
+      golem.body.velocity.x = 0;
+      player.body.velocity.x = 0;
+      golem.anims.play('golemDeath');      
+      gameOver = true;
+    }
 
     bullets.setVelocityX(500);
     bullets.children.iterate(function (bullet) {
@@ -733,8 +734,15 @@ const addCoins = (player, coin) => {
   coin.disableBody(true, true);
 }
 
-const hurtGolemLeft = (bullet, golem) => {
-  golemHealth = golemHealth - 5;
+const golemHealthBar = document.getElementById('golem-health-bar');
+golemHealthBar.setAttribute('style','position: absolute; top: 30px; left: 750px; width: 400px; height: 15px; background-color: red;')
+
+
+const golemText = document.getElementById('golem-text');
+golemText.setAttribute('style','position: absolute; top: 30px; left: 680px; color: white; font-family: "Courier New", Courier, monospace;')
+
+const hurtGolem = (bullet, golem) => {
+  golemHealth = golemHealth - 1;
   bullet.disableBody(true, true);
   golems.setVelocityX(0);
   console.log(golemHealth)

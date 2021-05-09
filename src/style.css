@@ -117,3 +117,12 @@ body {
       width: 0%;
   }
 };
+
+#golem-health-bar {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 300px;
+  height: 15px;
+  background-color: red;
+}
