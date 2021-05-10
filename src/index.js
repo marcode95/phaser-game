@@ -48,6 +48,9 @@ import knightRunningLeft5 from './assets/Walkleft_06.png';
 import knightAttackingRight from './assets/Action_16.png';
 import knightAttackingLeft from './assets/Actionleft_16.png';
 
+import play from './assets/play.png';
+
+
 var player;
 var wolves;
 var golems;
@@ -76,9 +79,26 @@ class SceneMainMenu extends Phaser.Scene {
   constructor() {
     super({ key: "SceneMainMenu" });
   }
+  preload () {
+    this.load.image('play', play);
+  }
 
   create() {
-    this.scene.start("SceneMain");
+    this.play = this.add.image(600, 300, 'play').setInteractive();
+    this.play.on('pointerdown', () => {
+      this.scene.start('SceneMain');
+    });
+
+    this.welcomeText = this.add.text(
+      this.cameras.main.width / 2,
+      120,
+      `WALD`,
+      {
+        fontSize: '80px',
+        fill: '#FFFFFF',
+      },
+    );
+    this.welcomeText.setOrigin(0.5, 0.5);
   }
 }
 
@@ -631,6 +651,7 @@ var config = {
   type: Phaser.AUTO,
   width: 1200,
   height: 675,
+  dom: { createContainer: true },
   physics: {
       default: 'arcade',
       arcade: {
@@ -734,7 +755,6 @@ const addHeart = (player, heartItem) => {
 
 const starItemField = document.getElementById('star-item-field');
 starItemField.setAttribute('style','position: absolute; top: 223px; left: 20px;')
-console.log(starItemField)
 const activateInvincibilityItem = (player, starItem) => {
   activateInvincibility(8000);
   starItem.disableBody(true, true);
