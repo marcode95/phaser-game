@@ -7,7 +7,6 @@ body {
   position: absolute;
   top: 110px;
   left: 16px;
-  display: flex;
 }
 
 #health-bar i {
@@ -20,7 +19,6 @@ body {
   position: absolute;
   top: 17px;
   left: 16px;
-  display: flex;
   font-size: 30px;
   color: white;
   font-family: 'Courier New', Courier, monospace;
@@ -142,4 +140,8 @@ body {
 
 .display-none {
   display: none;
+}
+
+.display-flex {
+  display: flex;
 }

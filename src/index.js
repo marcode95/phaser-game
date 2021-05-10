@@ -67,13 +67,15 @@ var lava;
 var cursors;
 var spaceKey
 var score = 0;
-var gameOver = false;
 let invincible = false;
 let superJump = false;
 let readyToShoot = true;
 var aKey;
 let normalJumpHeight = -370;
 let heartSubtracted = false;
+let id = 'cJOPOhMbh0xzmA7V3fdX';
+let deathCheck = false;
+
 
 class SceneMainMenu extends Phaser.Scene {
   constructor() {
@@ -82,9 +84,17 @@ class SceneMainMenu extends Phaser.Scene {
   preload () {
     this.load.image('play', play);
   }
-
   create() {
-    this.play = this.add.image(600, 300, 'play').setInteractive();
+    hideStatuses();
+    this.play = this.add.text(
+      554,
+      237.5,
+      `PLAY`,
+      {
+        fontSize: '40px',
+        fill: '#FFFFFF',
+      },
+    ).setInteractive();
     this.play.on('pointerdown', () => {
       this.scene.start('SceneMain');
     });
@@ -101,6 +111,7 @@ class SceneMainMenu extends Phaser.Scene {
     this.welcomeText.setOrigin(0.5, 0.5);
   }
 }
+
 
 class SceneMain extends Phaser.Scene {
   constructor() {
@@ -157,6 +168,8 @@ class SceneMain extends Phaser.Scene {
   }
 
   create () {
+    showStatuses();
+    const timeCounter = setInterval(clock, 1000);
     //  A simple background for our game
     this.add.image(600, 337.5, 'sky').setScrollFactor(0);
     createLoop(this, 9, 'trees4', 0.2);
@@ -270,14 +283,12 @@ class SceneMain extends Phaser.Scene {
 
   
     // The player and its settings
-    player = this.physics.add.sprite(6900, 0, 'krr0');
+    player = this.physics.add.sprite(6800, 0, 'krr0');
   
     //  Player physics properties. Give the little guy a slight bounce.
     player.setCollideWorldBounds(false);
     player.setGravityY(300);
-    
   
-
   
     //  Input Events
     cursors = this.input.keyboard.createCursorKeys();
@@ -402,7 +413,6 @@ class SceneMain extends Phaser.Scene {
 
 
     this.cameras.main.setBounds(0, 0, 10000);
-
         //  Our player animations, turning, walking left and walking right.
         this.anims.create({
           key: 'left',
@@ -494,14 +504,9 @@ class SceneMain extends Phaser.Scene {
     cam.startFollow(player);
     cam.setFollowOffset(0, 600);
     
-    if (gameOver)
-    {
-        return;
+    if (hearts === 0) {
+      location.reload();
     }
-  
-    // if (player.body.velocity.x === 0) {
-    //   player.anims.play('turn');
-    // }
   
     if (cursors.left.isDown)
     {  
@@ -591,7 +596,7 @@ class SceneMain extends Phaser.Scene {
         score = score + (250 - timeCount) + 200;
         updateScore();
         clearInterval(timeCounter);
-        gameOver = true;
+
       }
     });
 
@@ -621,10 +626,6 @@ class SceneMain extends Phaser.Scene {
         heartSubtracted = true;
       }
     }
-
-    if (hearts === 0) {
-      gameOver = true;
-    }
   }
 }
 
@@ -643,7 +644,29 @@ class SceneGameOver extends Phaser.Scene {
   }
 
   create() {
-    
+    this.welcomeText = this.add.text(
+      this.cameras.main.width / 2,
+      120,
+      `GAME OVER`,
+      {
+        fontSize: '80px',
+        fill: '#FFFFFF',
+      },
+    );
+    this.welcomeText.setOrigin(0.5, 0.5);
+
+    this.play = this.add.text(
+      490,
+      237.5,
+      `PLAY AGAIN`,
+      {
+        fontSize: '40px',
+        fill: '#FFFFFF',
+      },
+    ).setInteractive();
+    this.play.on('pointerdown', () => {
+      this.scene.start('SceneMain');
+    });
   }
 }
 
@@ -801,7 +824,23 @@ const clock = () => {
   time.innerHTML = 'Time:  ' + timeCount;
 }
 
-const timeCounter = setInterval(clock, 1000);
+const hideStatuses = () => {
+  scoreField.classList.remove('display-flex');
+  healthBar.classList.remove('display-flex');
+  time.classList.remove('display-block');
+  scoreField.classList.add('display-none');
+  healthBar.classList.add('display-none');
+  time.classList.add('display-none');
+}
+
+const showStatuses = () => {
+  scoreField.classList.remove('display-none');
+  healthBar.classList.remove('display-none');
+  time.classList.remove('display-none');
+  scoreField.classList.add('display-flex');
+  healthBar.classList.add('display-flex');
+  time.classList.add('display-block');
+}
 
 function hitBomb (player, bomb)
 {
