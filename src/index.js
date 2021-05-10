@@ -50,7 +50,7 @@ import knightAttackingLeft from './assets/Actionleft_16.png';
 
 import play from './assets/play.png';
 
-
+var gameOver = false;
 var player;
 var wolves;
 var golems;
@@ -185,7 +185,6 @@ class SceneMain extends Phaser.Scene {
 
   create () {
     showStatuses();
-    const timeCounter = setInterval(clock, 1000);
     //  A simple background for our game
     this.add.image(600, 337.5, 'sky').setScrollFactor(0);
     createLoop(this, 9, 'trees4', 0.2);
@@ -520,6 +519,11 @@ class SceneMain extends Phaser.Scene {
     cam.startFollow(player);
     cam.setFollowOffset(0, 600);
     
+    if (gameOver)
+    {
+        return;
+    }
+
     if (hearts === 0) {
       location.reload();
     }
@@ -612,7 +616,7 @@ class SceneMain extends Phaser.Scene {
         score = score + (250 - timeCount) + 200;
         updateScore();
         clearInterval(timeCounter);
-
+        gameOver = true;
       }
     });
 
@@ -824,7 +828,7 @@ golemText.setAttribute('style','position: absolute; top: 30px; left: 680px; colo
 
 const hurtGolem = (bullet, golem) => {
   bullet.disableBody(true, true);
-  golemHealth = golemHealth - 1;
+  golemHealth = golemHealth - 10;
   let golemHealthBarLength = 400*(golemHealth/25);  
   golemHealthBar.style.width = golemHealthBarLength + 'px'
 }
@@ -840,6 +844,7 @@ const clock = () => {
   timeCount = timeCount + 1;
   time.innerHTML = 'Time:  ' + timeCount;
 }
+const timeCounter = setInterval(clock, 1000);
 
 const hideStatuses = () => {
   scoreField.classList.remove('display-flex');
