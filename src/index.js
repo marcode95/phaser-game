@@ -1,5 +1,7 @@
 import './style.css';
 
+import APIHandler from './components/api';
+
 import sky from './assets/sky.png';
 import stones from './assets/stones.png';
 import trees1 from './assets/trees1.png';
@@ -617,6 +619,14 @@ class SceneMain extends Phaser.Scene {
         updateScore();
         clearInterval(timeCounter);
         gameOver = true;
+        const username = JSON.parse(localStorage.getItem('username:'));
+        const obj = {
+          user: username,
+          score: score,
+        };
+        APIHandler.postData('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/cJOPOhMbh0xzmA7V3fdX/scores', obj)
+          .then(data => {
+          });
       }
     });
 
