@@ -52,6 +52,13 @@ import knightAttackingLeft from './assets/Actionleft_16.png';
 
 import play from './assets/play.png';
 
+import monster from './assets/monster.wav';
+import monsterDeath from './assets/monster-death.wav';
+import shot from './assets/shot.wav';
+import footsteps from './assets/footsteps.wav';
+import battleTheme from './assets/battle-theme.wav';
+import mainTheme from './assets/main-theme.wav';
+
 var gameOver = false;
 var player;
 var wolves;
@@ -239,9 +246,17 @@ class SceneMain extends Phaser.Scene {
     this.load.spritesheet('golemDying', golemDying, { frameWidth: 192, frameHeight: 140 });
 
     this.load.image('heart', heart);
+
+    this.load.audio('monster', monster);
+    this.load.audio('monsterDeath', monsterDeath);
+    this.load.audio('battleTheme', battleTheme);
+    this.load.audio('mainTheme', mainTheme);
+    this.load.audio('footsteps', footsteps);
+    this.load.audio('shot', shot);
   }
 
   create () {
+    this.shot = this.sound.add('shot');
     showStatuses();
     //  A simple background for our game
     this.add.image(600, 337.5, 'sky').setScrollFactor(0);
@@ -611,6 +626,7 @@ class SceneMain extends Phaser.Scene {
     if (spaceKey.isDown) {
       player.anims.play('attackRight', false);
       if (readyToShoot) {
+        this.shot.play();
         bullets.add(this.physics.add.image(player.x + 28, player.y - 5, "bullet"));
         readyToShoot = false;
         setTimeout(function(){ readyToShoot = true; }, 500);
