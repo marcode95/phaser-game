@@ -145,3 +145,28 @@ body {
 .display-flex {
   display: flex;
 }
+
+#form {
+  position: absolute;
+  top: 250px;
+  left: 344px;
+  font-family: 'Courier New', Courier, monospace;
+  flex-direction: column;
+}
+
+#nameInput {
+  border: none;
+  border-bottom: 1px solid white;
+  background-color: transparent;
+  font-size: 40px;
+  color: white;
+  text-align: center;
+}
+
+#button {
+  border: none;
+  background-color: transparent;
+  font-size: 40px;
+  color: white;
+  margin-top: 60px;
+}
