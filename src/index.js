@@ -88,6 +88,17 @@ class SceneMainMenu extends Phaser.Scene {
   }
   create() {
     hideStatuses();
+    this.welcomeText = this.add.text(
+      this.cameras.main.width / 2,
+      120,
+      `WALD`,
+      {
+        fontSize: '100px',
+        fill: '#FFFFFF',
+      },
+    );
+    this.welcomeText.setOrigin(0.5, 0.5);
+
     this.play = this.add.text(554,237.5,`PLAY`,
       {
         fontSize: '40px',
@@ -98,16 +109,15 @@ class SceneMainMenu extends Phaser.Scene {
       this.scene.start('SceneNameInput');
     });
 
-    this.welcomeText = this.add.text(
-      this.cameras.main.width / 2,
-      120,
-      `WALD`,
-      {
-        fontSize: '80px',
-        fill: '#FFFFFF',
-      },
-    );
-    this.welcomeText.setOrigin(0.5, 0.5);
+    this.leaderboard = this.add.text(475, 327.5,`LEADERBOARD`,
+    {
+      fontSize: '40px',
+      fill: '#FFFFFF',
+    })
+    .setInteractive();
+    this.leaderboard.on('pointerdown', () => {
+      this.scene.start('SceneLeaderboard');
+    });
   }
 }
 
@@ -130,6 +140,52 @@ class SceneNameInput extends Phaser.Scene {
   }
 }
 
+class SceneLeaderboard extends Phaser.Scene {
+  constructor() {
+    super({ key: "SceneLeaderboard" });
+  }
+
+  create() {
+    const url = 'https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/cJOPOhMbh0xzmA7V3fdX/scores';
+    const score = JSON.parse(localStorage.getItem('score:'));
+    const username = JSON.parse(localStorage.getItem('username:'));
+    const obj = { // eslint-disable-line
+      user: username,
+      score,
+    };
+
+
+    APIHandler.getData(url)
+      .then(data => {
+        this.space = 0;
+
+        data.result.sort((a, b) => b.score - a.score).slice(0, 10).forEach((userObj, index) => {
+          this.add.text(
+            150,
+            170 + this.space,
+            `${index + 1}. ${userObj.user} | ${userObj.score}`,
+            {
+              font: '19px monospace',
+              fill: '#0000ff',
+            },
+          );
+          this.space += 30;
+        });
+      });
+
+    this.back = this.add.text(554,537.5,`BACK`,
+    {
+      fontSize: '40px',
+      fill: '#FFFFFF',
+    })
+    .setInteractive();
+    this.back.on('pointerdown', () => {
+      this.scene.start('SceneMainMenu');
+    });
+  }
+
+  
+}
 
 class SceneMain extends Phaser.Scene {
   constructor() {
@@ -714,6 +770,7 @@ var config = {
   },
   scene: [
     SceneMainMenu,
+    SceneLeaderboard,
     SceneNameInput,
     SceneMain,
     SceneGameOver
