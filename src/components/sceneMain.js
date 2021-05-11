@@ -191,7 +191,6 @@ const clock = () => {
   timeCount += 1;
   time.innerHTML = `Time:  ${timeCount}`;
 };
-const timeCounter = setInterval(clock, 1000);
 
 const showStatuses = () => {
   scoreField.classList.remove('display-none');
@@ -272,7 +271,8 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
 
   create() {
     showStatuses();
-
+    timeCount = 0;
+    setInterval(clock, 1000);
     this.shot = this.sound.add('shot', { volume: 0.1 });
     this.mainTheme = this.sound.add('mainTheme', { volume: 0.4 });
     this.battleTheme = this.sound.add('battleTheme', { volume: 0.2 });
@@ -695,7 +695,6 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
         golem.anims.play('golemDeath');
         score = score + (250 - timeCount) + 200;
         updateScore();
-        clearInterval(timeCounter);
         gameOver = true;
         const name = JSON.parse(localStorage.getItem('username:'));
         const object = {
