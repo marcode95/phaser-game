@@ -1,5 +1,8 @@
 import './assets/style.css';
 import SceneMainMenu from './components/sceneMainMenu';
+import SceneNameInput from './components/sceneNameInput';
+import SceneLeaderboard from './components/sceneLeaderboard';
+import SceneGameOver from './components/sceneGameOver';
 
 import APIHandler from './components/api';
 
@@ -51,7 +54,6 @@ import knightRunningLeft5 from './assets/png/Walkleft_06.png';
 import knightAttackingRight from './assets/png/Action_16.png';
 import knightAttackingLeft from './assets/png/Actionleft_16.png';
 
-import play from './assets/png/play.png';
 
 import monster from './assets/audio/monster.wav';
 import monsterDeath from './assets/audio/monster-death.wav';
@@ -208,17 +210,6 @@ const showStatuses = () => {
   time.classList.add('display-block');
 };
 
-const form = document.getElementById('form');
-const showForm = () => {
-  form.classList.remove('display-none');
-  form.classList.add('display-flex');
-};
-
-const hideForm = () => {
-  form.classList.remove('display-flex');
-  form.classList.add('display-none');
-};
-
 const patrolPlatform = (wolf, platform) => {
   if (wolf.body.velocity.x > 0 && wolf.x + wolf.width > platform.x + platform.width) {
     wolf.body.velocity.x *= -1;
@@ -227,70 +218,6 @@ const patrolPlatform = (wolf, platform) => {
   }
 };
 
-class SceneNameInput extends Phaser.Scene {
-  constructor() {
-    super({ key: 'SceneNameInput' });
-  }
-
-  create() {
-    showForm();
-    const button = document.getElementById('button');
-    button.addEventListener('click', () => {
-      const nameInput = document.getElementById('nameInput').value;
-      if (nameInput == null || nameInput === '') {
-        localStorage.setItem('username:', JSON.stringify('Anon'));
-      } else {
-        localStorage.setItem('username:', JSON.stringify(nameInput));
-      }
-      this.scene.start('SceneMain');
-      hideForm();
-    });
-  }
-}
-
-class SceneLeaderboard extends Phaser.Scene {
-  constructor() {
-    super({ key: 'SceneLeaderboard' });
-  }
-
-  create() {
-    const url = 'https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/cJOPOhMbh0xzmA7V3fdX/scores';
-    const score = JSON.parse(localStorage.getItem('score:'));
-    const username = JSON.parse(localStorage.getItem('username:'));
-    const obj = { // eslint-disable-line
-      user: username,
-      score,
-    };
-
-    APIHandler.getData(url)
-      .then((data) => {
-        this.space = 0;
-
-        data.result.sort((a, b) => b.score - a.score).slice(0, 10).forEach((userObj, index) => {
-          this.add.text(
-            150,
-            170 + this.space,
-            `${index + 1}. ${userObj.user} | ${userObj.score}`,
-            {
-              font: '19px monospace',
-              fill: '#0000ff',
-            },
-          );
-          this.space += 30;
-        });
-      });
-
-    this.back = this.add.text(554, 537.5, 'BACK',
-      {
-        fontSize: '40px',
-        fill: '#FFFFFF',
-      })
-      .setInteractive();
-    this.back.on('pointerdown', () => {
-      this.scene.start('SceneMainMenu');
-    });
-  }
-}
 
 class SceneMain extends Phaser.Scene {
   constructor() {
@@ -841,37 +768,7 @@ class SceneMain extends Phaser.Scene {
   }
 }
 
-class SceneGameOver extends Phaser.Scene {
-  constructor() {
-    super({ key: 'SceneGameOver' });
-  }
 
-  create() {
-    this.welcomeText = this.add.text(
-      this.cameras.main.width / 2,
-      120,
-      'GAME OVER',
-      {
-        fontSize: '80px',
-        fill: '#FFFFFF',
-      },
-    );
-    this.welcomeText.setOrigin(0.5, 0.5);
-
-    this.play = this.add.text(
-      490,
-      237.5,
-      'PLAY AGAIN',
-      {
-        fontSize: '40px',
-        fill: '#FFFFFF',
-      },
-    ).setInteractive();
-    this.play.on('pointerdown', () => {
-      this.scene.start('SceneMain');
-    });
-  }
-}
 
 const config = {
   type: Phaser.AUTO,
