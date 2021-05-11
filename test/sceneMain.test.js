@@ -1,3 +1,4 @@
+import "babel-polyfill"
 import updateHealthBar from '../src/components/sceneMain'
 
 describe('helper functions for main scene', () => {
