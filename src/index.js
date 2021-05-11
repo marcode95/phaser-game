@@ -21,8 +21,7 @@ const config = {
     SceneMainMenu,
     SceneLeaderboard,
     SceneNameInput,
-    SceneMain,
-    SceneGameOver,
+    SceneMain
   ],
   pixelArt: true,
   roundPixels: true,
