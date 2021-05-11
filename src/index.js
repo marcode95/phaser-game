@@ -258,8 +258,8 @@ class SceneMain extends Phaser.Scene {
   create () {
     this.shot = this.sound.add('shot', {volume: 0.1});
     this.mainTheme = this.sound.add('mainTheme', {volume: 0.4});
-    this.battleTheme = this.sound.add('battleTheme', {volume: 0.3});
-    this.monster = this.sound.add('monster', {volume: 0.3});
+    this.battleTheme = this.sound.add('battleTheme', {volume: 0.2});
+    this.monster = this.sound.add('monster', {volume: 0.2});
     this.monsterDeath = this.sound.add('monsterDeath', {volume: 0.3});
     this.footsteps = this.sound.add('footsteps', {volume: 0.5});
     this.mainTheme.play();
@@ -730,12 +730,12 @@ class SceneMain extends Phaser.Scene {
       golemHealthBar.classList.add('display-block');
       golemText.classList.add('display-block');
       normalJumpHeight = -410;
-      this.mainTheme.stop();
       if (heartSubtracted === false) {
         hearts = 1;
         updateHealthBar();
         heartSubtracted = true;
         this.monster.play();
+        this.mainTheme.stop();
         this.battleTheme.play();
       }
     }
