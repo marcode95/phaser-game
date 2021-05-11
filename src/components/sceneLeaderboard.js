@@ -7,25 +7,19 @@ export default class SceneLeaderboard extends Phaser.Scene { // eslint-disable-l
 
   create() {
     const url = 'https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/cJOPOhMbh0xzmA7V3fdX/scores';
-    const score = JSON.parse(localStorage.getItem('score:'));
-    const username = JSON.parse(localStorage.getItem('username:'));
-    const obj = { // eslint-disable-line
-      user: username,
-      score,
-    };
 
     APIHandler.getData(url)
       .then((data) => {
         this.space = 0;
 
-        data.result.sort((a, b) => b.score - a.score).slice(0, 10).forEach((userObj, index) => {
+        data.result.sort((a, b) => b.score - a.score).slice(0, 10).forEach((object, index) => {
           this.add.text(
             150,
             170 + this.space,
-            `${index + 1}. ${userObj.user} | ${userObj.score}`,
+            `${index + 1}. ${object.user} ${object.score}`,
             {
-              font: '19px monospace',
-              fill: '#0000ff',
+              font: '30px courier',
+              fill: '#ffffff',
             },
           );
           this.space += 30;

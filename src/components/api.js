@@ -1,5 +1,5 @@
 const APIHandler = (() => {
-  const postData = async (url, dataObj) => {
+  const postData = async (url, object) => {
     try {
       const response = await fetch(url, {
         mode: 'cors',
@@ -7,11 +7,11 @@ const APIHandler = (() => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(dataObj),
+        body: JSON.stringify(object),
       });
       return response.json();
-    } catch (err) {
-      return err;
+    } catch (error) {
+      return error;
     }
   };
 
@@ -19,8 +19,8 @@ const APIHandler = (() => {
     try {
       const response = await fetch(url);
       return response.json();
-    } catch (err) {
-      return err;
+    } catch (error) {
+      return error;
     }
   };
 
