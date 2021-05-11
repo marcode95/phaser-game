@@ -176,3 +176,21 @@ body {
   color: white;
   margin-top: 60px;
 }
+
+#game-won {
+  position: absolute;
+  top: 200px;
+  left: 380px;
+  font-size: 100px;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+#game-lost {
+  position: absolute;
+  top: 200px;
+  left: 380px;
+  font-size: 100px;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+}

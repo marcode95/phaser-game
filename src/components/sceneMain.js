@@ -422,7 +422,7 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     });
 
 
-    player = this.physics.add.sprite(6800, 0, 'krr0');
+    player = this.physics.add.sprite(100, 0, 'krr0');
     player.setCollideWorldBounds(false);
     player.setGravityY(300);
 
@@ -612,14 +612,17 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     }
 
     if (hearts === 0) {
+      gameOver = true;
       const name = JSON.parse(localStorage.getItem('username:'));
       const object = {
         user: name,
         score,
       };
-      console.log(object)
       APIHandler.postData('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/cJOPOhMbh0xzmA7V3fdX/scores', object);
-      location.reload(); // eslint-disable-line      
+      const gameLost = document.getElementById('game-lost');
+      gameLost.classList.remove('display-none');
+      gameLost.classList.add('display-block');
+      setTimeout(() => { location.reload(); }, 4000);
     }
 
     if (cursors.left.isDown) {
@@ -702,6 +705,10 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
           score,
         };
         APIHandler.postData('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/cJOPOhMbh0xzmA7V3fdX/scores', object);
+        const gameWon = document.getElementById('game-won');
+        gameWon.classList.remove('display-none');
+        gameWon.classList.add('display-block');
+        setTimeout(() => { location.reload(); }, 6000);
       }
     });
 

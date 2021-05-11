@@ -21,7 +21,7 @@ export default class SceneMainMenu extends Phaser.Scene { // eslint-disable-line
     this.welcomeText = this.add.text(
       this.cameras.main.width / 2,
       120,
-      'WALD',
+      'IN DEN WÄLDERN',
       {
         fontSize: '100px',
         fill: '#FFFFFF',

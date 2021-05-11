@@ -14,8 +14,8 @@ export default class SceneLeaderboard extends Phaser.Scene { // eslint-disable-l
 
         data.result.sort((a, b) => b.score - a.score).slice(0, 10).forEach((object, index) => {
           this.add.text(
-            150,
-            170 + this.space,
+            500,
+            100 + this.space,
             `${index + 1}. ${object.user} ${object.score}`,
             {
               font: '30px courier',
