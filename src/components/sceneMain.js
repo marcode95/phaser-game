@@ -293,6 +293,19 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     lava = this.physics.add.staticGroup();
     golemFreeGround = this.physics.add.staticGroup();
 
+    createGround(-50, 620, 'ground', 1.5, 1);
+    createGround(-50, 570, 'ground', 1.5, 1);
+    createGround(-50, 520, 'ground', 1.5, 1);
+    createGround(-50, 470, 'ground', 1.5, 1);
+    createGround(-50, 420, 'ground', 1.5, 1);
+    createGround(-50, 370, 'ground', 1.5, 1);
+    createGround(-50, 320, 'ground', 1.5, 1);
+    createGround(-50, 270, 'ground', 1.5, 1);
+    createGround(-50, 220, 'ground', 1.5, 1);
+    createGround(-50, 170, 'ground', 1.5, 1);
+    createGround(-50, 120, 'ground', 1.5, 1);
+    createGround(-50, 70, 'ground', 1.5, 1);
+    createGround(-50, 20, 'ground', 1.5, 1);
     createGround(32, 670, 'ground', 1.5, 3);
     createLava(322, 680, 'lavaTile', 1.5, 100);
     createGround(450, 570, 'ground', 1.5, 1);
@@ -409,7 +422,7 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     });
 
 
-    player = this.physics.add.sprite(6700, 0, 'krr0');
+    player = this.physics.add.sprite(100, 0, 'krr0');
     player.setCollideWorldBounds(false);
     player.setGravityY(300);
 
