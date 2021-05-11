@@ -20,7 +20,7 @@ const config = {
     SceneMainMenu,
     SceneLeaderboard,
     SceneNameInput,
-    SceneMain
+    SceneMain,
   ],
   pixelArt: true,
   roundPixels: true,

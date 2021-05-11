@@ -421,7 +421,6 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
       ],
     });
 
-
     player = this.physics.add.sprite(100, 600, 'krr0');
     player.setCollideWorldBounds(false);
     player.setGravityY(300);
@@ -622,7 +621,7 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
       const gameLost = document.getElementById('game-lost');
       gameLost.classList.remove('display-none');
       gameLost.classList.add('display-block');
-      setTimeout(() => { location.reload(); }, 4000);
+      setTimeout(() => { location.reload(); }, 4000); // eslint-disable-line
     }
 
     if (cursors.left.isDown) {
@@ -708,7 +707,7 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
         const gameWon = document.getElementById('game-won');
         gameWon.classList.remove('display-none');
         gameWon.classList.add('display-block');
-        setTimeout(() => { location.reload(); }, 6000);
+        setTimeout(() => { location.reload(); }, 6000); // eslint-disable-line
       }
     });
 
@@ -745,5 +744,5 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
 }
 
 export {
-  updateHealthBar
-}
+  updateHealthBar,
+};
