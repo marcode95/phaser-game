@@ -1,6 +1,6 @@
 import APIHandler from './api';
 
-export default class SceneLeaderboard extends Phaser.Scene {
+export default class SceneLeaderboard extends Phaser.Scene { // eslint-disable-line
   constructor() {
     super({ key: 'SceneLeaderboard' });
   }

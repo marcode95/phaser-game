@@ -6,7 +6,7 @@ import SceneGameOver from './components/sceneGameOver';
 import SceneMain from './components/sceneMain';
 
 const config = {
-  type: Phaser.AUTO,
+  type: Phaser.AUTO, // eslint-disable-line
   width: 1200,
   height: 675,
   dom: { createContainer: true },
@@ -28,4 +28,4 @@ const config = {
   roundPixels: true,
 };
 
-const game = new Phaser.Game(config);
+const game = new Phaser.Game(config); // eslint-disable-line

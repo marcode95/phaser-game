@@ -11,7 +11,7 @@ const hideStatuses = () => {
   time.classList.add('display-none');
 };
 
-export default class SceneMainMenu extends Phaser.Scene {
+export default class SceneMainMenu extends Phaser.Scene { // eslint-disable-line
   constructor() {
     super({ key: 'SceneMainMenu' });
   }

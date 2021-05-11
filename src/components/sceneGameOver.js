@@ -1,4 +1,4 @@
-export default class SceneGameOver extends Phaser.Scene {
+export default class SceneGameOver extends Phaser.Scene { // eslint-disable-line
   constructor() {
     super({ key: 'SceneGameOver' });
   }

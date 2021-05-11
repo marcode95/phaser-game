@@ -9,7 +9,7 @@ const hideForm = () => {
   form.classList.add('display-none');
 };
 
-export default class SceneNameInput extends Phaser.Scene {
+export default class SceneNameInput extends Phaser.Scene { // eslint-disable-line
   constructor() {
     super({ key: 'SceneNameInput' });
   }

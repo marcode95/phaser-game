@@ -1,4 +1,4 @@
-import APIHandler from '../components/api';
+import APIHandler from './api';
 
 import sky from '../assets/png/sky.png';
 import stones from '../assets/png/stones.png';
@@ -47,7 +47,6 @@ import knightRunningLeft5 from '../assets/png/Walkleft_06.png';
 
 import knightAttackingRight from '../assets/png/Action_16.png';
 import knightAttackingLeft from '../assets/png/Actionleft_16.png';
-
 
 import monster from '../assets/audio/monster.wav';
 import monsterDeath from '../assets/audio/monster-death.wav';
@@ -179,9 +178,8 @@ golemHealthBar.setAttribute('style', 'position: absolute; top: 30px; left: 750px
 const golemText = document.getElementById('golem-text');
 golemText.setAttribute('style', 'position: absolute; top: 30px; left: 680px; color: white; font-family: "Courier New", Courier, monospace;');
 
-const hurtGolem = (bullet, golem) => {
+const hurtGolem = (bullet, golem) => { // eslint-disable-line
   bullet.disableBody(true, true);
-  golem = golem;
   golemHealth -= 10;
   const golemHealthBarLength = 400 * (golemHealth / 25);
   golemHealthBar.style.width = `${golemHealthBarLength}px`;
@@ -212,8 +210,7 @@ const patrolPlatform = (wolf, platform) => {
   }
 };
 
-
-export default class SceneMain extends Phaser.Scene {
+export default class SceneMain extends Phaser.Scene { // eslint-disable-line
   constructor() {
     super({ key: 'SceneMain' });
   }
@@ -429,8 +426,8 @@ export default class SceneMain extends Phaser.Scene {
 
     //  Input Events
     cursors = this.input.keyboard.createCursorKeys();
-    spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-    aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE); // eslint-disable-line
+    aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A); // eslint-disable-line
 
     //  WOLVES
     wolves = this.physics.add.group({
@@ -636,7 +633,7 @@ export default class SceneMain extends Phaser.Scene {
     }
 
     if (hearts === 0) {
-      location.reload();
+      location.reload(); // eslint-disable-line
     }
 
     if (cursors.left.isDown) {
@@ -720,7 +717,7 @@ export default class SceneMain extends Phaser.Scene {
           score,
         };
         APIHandler.postData('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/cJOPOhMbh0xzmA7V3fdX/scores', obj)
-          .then((data) => {
+          .then((data) => { // eslint-disable-line
           });
       }
     });
