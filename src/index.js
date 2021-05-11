@@ -2,7 +2,6 @@ import './assets/style.css';
 import SceneMainMenu from './components/sceneMainMenu';
 import SceneNameInput from './components/sceneNameInput';
 import SceneLeaderboard from './components/sceneLeaderboard';
-import SceneGameOver from './components/sceneGameOver';
 import SceneMain from './components/sceneMain';
 
 const config = {

@@ -2,10 +2,13 @@
   <h1><b>IN DEN WÄLDERN</b></h1>
   <h2><b>IN THE WOODS</b></h2>
 
-A Jump 'n Run game built with Javascripts Phaser Framework! Fight your way through the woods defying all the dangers that lurk in the dark! Overcome moving platforms, wolves and other threats and defend yourself using your magic gun! Try setting a new highscore by killing all enemies and collecting all coins as quick as possible! Time's running - RAUS AUS DEN WÄLDERN! 
-<br>  
+A Jump 'n Run game built with Javascript's Phaser Framework! Fight your way through the woods defying all the dangers that lurk in the dark! Overcome moving platforms, wolves and other threats and defend yourself using your magic gun! Try setting a new highscore by killing all enemies and collecting all coins as quickly as possible! Time's running - RAUS AUS DEN WÄLDERN! 
+<br>
+<br>
   
 ![screenshot](./src/assets/png/screenshot1.png)
+<br>
+
 ![screenshot](./src/assets/png/screenshot2.png)
 
 ## Live Version
@@ -25,8 +28,7 @@ https://cocky-ardinghelli-805b0e.netlify.app/
 
 
 ## About <a name = "about"></a>
-This project was a task by Microverse Inc. to build a to-do-list inluding a simple form for adding to-do's and projects, categorizing them and editing descriptions. 
-
+This project was a task by Microverse Inc. to build a platformer game using Javascript's Phaser framework.
 
 ## 🔧 Built with<a name = "with"></a>
 
@@ -34,6 +36,8 @@ This project was a task by Microverse Inc. to build a to-do-list inluding a simp
   - [x] CSS3
   - [x] Vanilla Javascript
   - [x] Webpack
+  - [x] Phaser
+  
 
 ## Usage <a name = "usage"></a>
 To use the code in this repository, follow the steps in this section:
@@ -58,7 +62,7 @@ If you don't meet the above prerequisites, then:
 ###  App <a name = "app"></a>
 With the installations above complete, you are set to use the code and view the application built in this repository. Follow these simple steps:
 
-- Change directory into the directory where you cloned the repository. Forexample ``vanheaven@vanheaven-VirtualBox:~/Microverse-projects$ cd to-do-list.``
+- Change directory into the directory where you cloned the repository. Forexample ``vanheaven@vanheaven-VirtualBox:~/Microverse-projects$ cd phaser-game.``
 - Open the index.html file using your browser
 
 ## ✒️  Authors <a name = "author"></a>
@@ -67,7 +71,7 @@ With the installations above complete, you are set to use the code and view the 
 
 - Github: [@marcode95](https://github.com/marcode95)
 - Linkedin: [@linkedin](https://www.linkedin.com/in/marcoerhardt95/)
-
+https://angel.co/u/marcoerhardt95
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!
