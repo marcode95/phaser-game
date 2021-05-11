@@ -180,7 +180,7 @@ golemText.setAttribute('style', 'position: absolute; top: 30px; left: 680px; col
 
 const hurtGolem = (bullet, golem) => { // eslint-disable-line
   bullet.disableBody(true, true);
-  golemHealth -= 10;
+  golemHealth -= 1;
   const golemHealthBarLength = 400 * (golemHealth / 25);
   golemHealthBar.style.width = `${golemHealthBarLength}px`;
 };
@@ -422,7 +422,7 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     });
 
 
-    player = this.physics.add.sprite(100, 0, 'krr0');
+    player = this.physics.add.sprite(100, 600, 'krr0');
     player.setCollideWorldBounds(false);
     player.setGravityY(300);
 
@@ -467,10 +467,10 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
 
     coins = this.physics.add.group({
       key: 'coin',
-      setXY: { x: 200, y: 0 },
+      setXY: { x: 200, y: 160 },
     });
 
-    coins.add(this.physics.add.image(850, 0, 'coin'));
+    coins.add(this.physics.add.image(850, 220, 'coin'));
     coins.add(this.physics.add.image(1230, 0, 'coin'));
     coins.add(this.physics.add.image(2000, 0, 'coin'));
     coins.add(this.physics.add.image(2350, 400, 'coin'));
