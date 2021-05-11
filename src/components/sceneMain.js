@@ -271,6 +271,8 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
   }
 
   create() {
+    showStatuses();
+
     this.shot = this.sound.add('shot', { volume: 0.1 });
     this.mainTheme = this.sound.add('mainTheme', { volume: 0.4 });
     this.battleTheme = this.sound.add('battleTheme', { volume: 0.2 });
@@ -278,8 +280,7 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     this.monsterDeath = this.sound.add('monsterDeath', { volume: 0.3 });
     this.footsteps = this.sound.add('footsteps', { volume: 0.5 });
     this.mainTheme.play();
-    showStatuses();
-    //  A simple background for our game
+
     this.add.image(600, 337.5, 'sky').setScrollFactor(0);
     createLoop(this, 9, 'trees4', 0.2);
     createLoop(this, 9, 'trees2', 0.4);
@@ -288,19 +289,10 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     createLoop(this, 9, 'stones', 1);
     createLoop(this, 9, 'glowworm4', 1);
 
-    //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = this.physics.add.staticGroup();
     lava = this.physics.add.staticGroup();
     golemFreeGround = this.physics.add.staticGroup();
-    golemFreeGround.create(7300, 470, 'ground').setScale(1.5).refreshBody();
-    golemFreeGround.create(7870, 470, 'ground').setScale(1.5).refreshBody();
-    golemFreeGround.create(7200, 380, 'ground').setScale(1.5).refreshBody();
-    golemFreeGround.create(7970, 380, 'ground').setScale(1.5).refreshBody();
 
-    //  Here we create the ground.
-    //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-    // platforms.create(32, 670, 'ground').setScale(1.5).refreshBody();
-    // platforms.create(96, 670, 'ground').setScale(1.5).refreshBody();
     createGround(32, 670, 'ground', 1.5, 3);
     createLava(322, 680, 'lavaTile', 1.5, 100);
     createGround(450, 570, 'ground', 1.5, 1);
@@ -330,12 +322,15 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     createGround(5860, 600, 'ground', 1.5, 1);
     createGround(7150, 600, 'ground', 1.5, 10);
 
+    golemFreeGround.create(7300, 470, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(7870, 470, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(7200, 380, 'ground').setScale(1.5).refreshBody();
+    golemFreeGround.create(7970, 380, 'ground').setScale(1.5).refreshBody();
+
     const movingPlattformOne = this.physics.add.image(850, 390, 'ground')
       .setImmovable(true)
       .setVelocity(100, -100);
-
     movingPlattformOne.body.setAllowGravity(false);
-
     this.tweens.timeline({
       targets: movingPlattformOne.body.velocity,
       loop: -1,
@@ -370,9 +365,7 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     const movingPlattformTwo = this.physics.add.image(3500, 500, 'ground')
       .setImmovable(true)
       .setVelocity(100, -100);
-
     movingPlattformTwo.body.setAllowGravity(false);
-
     this.tweens.timeline({
       targets: movingPlattformTwo.body.velocity,
       loop: -1,
@@ -395,9 +388,7 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     const movingPlattformThree = this.physics.add.image(5000, 500, 'ground')
       .setImmovable(true)
       .setVelocity(100, -100);
-
     movingPlattformThree.body.setAllowGravity(false);
-
     this.tweens.timeline({
       targets: movingPlattformThree.body.velocity,
       loop: -1,
@@ -417,19 +408,15 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
       ],
     });
 
-    // The player and its settings
-    player = this.physics.add.sprite(6700, 0, 'krr0');
 
-    //  Player physics properties. Give the little guy a slight bounce.
+    player = this.physics.add.sprite(6700, 0, 'krr0');
     player.setCollideWorldBounds(false);
     player.setGravityY(300);
 
-    //  Input Events
     cursors = this.input.keyboard.createCursorKeys();
     spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE); // eslint-disable-line
     aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A); // eslint-disable-line
 
-    //  WOLVES
     wolves = this.physics.add.group({
       key: 'wolfStanding',
       repeat: 2,
@@ -437,44 +424,34 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     });
     wolves.setVelocityX(150);
 
-    //  golems
     golems = this.physics.add.group({
       key: 'golemStanding',
       setXY: { x: 7900, y: 0 },
     });
     golems.setVelocityX(0.00000001);
 
-    //  JUMP ITEM
     jumpItems = this.physics.add.group({
       key: 'jumpItem',
       setXY: { x: 1900, y: 0 },
     });
-
     jumpItems.add(this.physics.add.image(5860, 500, 'jumpItem'));
 
-    //  HEART ITEM
     heartItems = this.physics.add.group({
       key: 'heartItem',
       setXY: { x: 2675, y: 400 },
     });
 
-    //  STAR ITEM
     starItems = this.physics.add.group({
       key: 'starItem',
       setXY: { x: 5400, y: 250 },
     });
 
-    //  BULLET
-    bullets = this.physics.add.group({
+    bullets = this.physics.add.group({});
 
-    });
-
-    //  LEFTBULLET
     leftBullets = this.physics.add.group({
       key: 'bullet',
     });
 
-    //  COIN
     coins = this.physics.add.group({
       key: 'coin',
       setXY: { x: 200, y: 0 },
@@ -499,7 +476,6 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     createLoop(this, 4, 'glowworm2', 1.50);
     createLoop(this, 4, 'glowworm3', 1.50);
 
-    //  Collide the player and the stars with the platforms
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(jumpItems, platforms);
     this.physics.add.collider(heartItems, platforms);
@@ -516,29 +492,19 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     this.physics.add.collider(player, golemFreeGround);
 
     this.physics.add.collider(player, jumpItems, activateSuperJump, null, this);
-
     this.physics.add.collider(player, heartItems, addHeart, null, this);
-
     this.physics.add.collider(player, starItems, activateInvincibilityItem, null, this);
-
     this.physics.add.collider(player, wolves, looseHeart, null, this);
-
     this.physics.add.collider(bullets, wolves, killWolf, null, this);
-
     this.physics.add.collider(leftBullets, wolves, killWolf, null, this);
-
     this.physics.add.collider(bullets, golems, hurtGolem, null, this);
-
     this.physics.add.collider(leftBullets, golems, hurtGolem, null, this);
-
     this.physics.add.collider(player, lava, looseHeart, null, this);
-
     this.physics.add.collider(player, coins, addCoins, null, this);
-
     this.physics.add.collider(player, golems, looseHeart, null, this);
 
     this.cameras.main.setBounds(0, 0, 10000);
-    //  Our player animations, turning, walking left and walking right.
+
     this.anims.create({
       key: 'left',
       frames: [
@@ -736,10 +702,6 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
 
     this.physics.add.collider(wolves, platforms, patrolPlatform, null, this);
 
-    if (player.x === 7000) {
-      this.battleTheme.play();
-    }
-
     if (player.x > 7000) {
       golemHealthBar.classList.remove('display-none');
       golemText.classList.remove('display-none');
@@ -756,4 +718,8 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
       }
     }
   }
+}
+
+export {
+  updateHealthBar
 }
