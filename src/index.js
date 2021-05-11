@@ -256,7 +256,13 @@ class SceneMain extends Phaser.Scene {
   }
 
   create () {
-    this.shot = this.sound.add('shot');
+    this.shot = this.sound.add('shot', {volume: 0.1});
+    this.mainTheme = this.sound.add('mainTheme', {volume: 0.4});
+    this.battleTheme = this.sound.add('battleTheme', {volume: 0.3});
+    this.monster = this.sound.add('monster', {volume: 0.3});
+    this.monsterDeath = this.sound.add('monsterDeath', {volume: 0.3});
+    this.footsteps = this.sound.add('footsteps', {volume: 0.5});
+    this.mainTheme.play();
     showStatuses();
     //  A simple background for our game
     this.add.image(600, 337.5, 'sky').setScrollFactor(0);
@@ -371,7 +377,7 @@ class SceneMain extends Phaser.Scene {
 
   
     // The player and its settings
-    player = this.physics.add.sprite(6800, 0, 'krr0');
+    player = this.physics.add.sprite(6700, 0, 'krr0');
   
     //  Player physics properties. Give the little guy a slight bounce.
     player.setCollideWorldBounds(false);
@@ -601,20 +607,14 @@ class SceneMain extends Phaser.Scene {
       location.reload();
     }
   
-    if (cursors.left.isDown)
-    {  
-        player.setVelocityX(-160);
-        player.anims.play('left', true);
-  
- 
+    if (cursors.left.isDown) {  
+      player.setVelocityX(-160);
+      player.anims.play('left', true);
     }
   
-    else if (cursors.right.isDown)
-    {
-        player.setVelocityX(160);
-        player.anims.play('right', true);
-  
- 
+    else if (cursors.right.isDown) {
+      player.setVelocityX(160);
+      player.anims.play('right', true);
     }
   
     else
@@ -633,16 +633,19 @@ class SceneMain extends Phaser.Scene {
       }        
     }
 
+
+
     if (aKey.isDown) {
       player.anims.play('attackLeft', false);
       if (readyToShoot) {
+        this.shot.play();
         leftBullets.add(this.physics.add.image(player.x - 28, player.y - 5, "bullet"));
         readyToShoot = false;
         setTimeout(function(){ readyToShoot = true; }, 500);
       }        
     }
   
-  
+
   
     if (cursors.up.isDown && player.body.touching.down) { 
       if (superJump === false) {
@@ -716,16 +719,24 @@ class SceneMain extends Phaser.Scene {
 
     this.physics.add.collider(wolves, platforms, patrolPlatform, null, this);
 
+
+    if (player.x === 7000) {
+      this.battleTheme.play();
+    }
+
     if (player.x > 7000) {
       golemHealthBar.classList.remove('display-none');
       golemText.classList.remove('display-none');
       golemHealthBar.classList.add('display-block');
       golemText.classList.add('display-block');
       normalJumpHeight = -410;
+      this.mainTheme.stop();
       if (heartSubtracted === false) {
         hearts = 1;
         updateHealthBar();
         heartSubtracted = true;
+        this.monster.play();
+        this.battleTheme.play();
       }
     }
   }
