@@ -80,6 +80,22 @@ With the installations above complete, you are set to use the code and view the 
 - Change directory into the directory where you cloned the repository. Forexample ``vanheaven@vanheaven-VirtualBox:~/Microverse-projects$ cd phaser-game.``
 - Open the index.html file using your browser
 
+###  Extra Detailed Instruction <a name = "ext"></a>
+
+**Step 1**<br>
+Navigate through the local folder where you want to clone the repository and run<br>
+`git@github.com:marcode95/phaser-game.git`. It will clone the repo to your local folder.<br>
+or with https<br>
+`https://github.com/marcode95/phaser-game.git`.<br>
+**Step 2**<br>
+Run `cd phaser-game`<br>
+**Step 3**<br>
+Run `npm install` to install the npm packages from the `package.json` file.<br>
+**Step 4**<br>
+Run `npm run start` to start the webpack server to view the app. The server refreshes the app every time you make a change to a file used by it.<br>
+**Step 5**<br>
+Most important, enjoy the app!<br>
+
 ## ✒️  Authors <a name = "author"></a>
 
 👤 **Marco Erhardt**
