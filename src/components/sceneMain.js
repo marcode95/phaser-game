@@ -745,5 +745,5 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
 
 export {
   looseHeart,
-  addHeart
+  addHeart,
 };
