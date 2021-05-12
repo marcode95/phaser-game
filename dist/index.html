@@ -1,0 +1,33 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>In den Wäldern</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <script src="https://kit.fontawesome.com/9a2f12287f.js" crossorigin="anonymous"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+  <div id="body">
+    <div id="score-field" class="display-none">Score: 0</div>
+    <div id="time" class="display-none">Time: 0</div>
+    <div id="health-bar" class="display-none"></div>
+    <div id="jump-item-field"></div>
+    <div id="star-item-field"></div>
+    <div id="golem-text" class="display-none">Golem</div>
+    <div id="golem-health-bar" class="display-none"></div>
+    <form id="form" class="display-none">
+      <input type="text" id="nameInput" placeholder="Name" class="input"/>
+      <input type="button" value="Submit" id="button"/>
+    </form>
+    <form action=""></form>
+    <div id="game-lost" class="display-none">GAME LOST</div>
+    <div id="game-won" class="display-none">GAME WON</div>
+  </div>
+  <script src="bundle.js"></script>
+</body>
+</html>

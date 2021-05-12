@@ -1,0 +1,196 @@
+body {
+  margin: 0 auto;
+  position: relative;
+}
+
+#health-bar {
+  position: absolute;
+  top: 110px;
+  left: 16px;
+}
+
+#health-bar i {
+  font-size: 30px;
+  color: red;
+  margin-right: 13px;
+}
+
+#score-field {
+  position: absolute;
+  top: 17px;
+  left: 16px;
+  font-size: 30px;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+#time {
+  position: absolute;
+  top: 61px;
+  left: 16px;
+  color: white;
+  font-size: 30px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+#jump-item-field {
+  position: absolute;
+  top: 153px;
+  left: 20px;
+}
+
+#superjump-text {
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 20px;
+  margin-bottom: 13px;
+}
+
+#progress {
+  height: 20px;
+  width: 150px;
+  display: flex;
+}
+
+.bar {
+  background-color: #fff;
+  width: 0;
+  height: 100%;
+  border-radius: 15px;
+  animation: progres 8s infinite linear;
+}
+
+@keyframes progres {
+  0% {
+    width: 100%;
+  }
+
+  25% {
+    width: 75%;
+  }
+
+  50% {
+    width: 50%;
+  }
+
+  75% {
+    width: 25%;
+  }
+
+  100% {
+    width: 0%;
+  }
+}
+
+#star-item-field {
+  position: absolute;
+  top: 143px;
+  left: 20px;
+}
+
+#star-progress {
+  height: 20px;
+  width: 150px;
+  display: flex;
+}
+
+#star-text {
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 20px;
+  margin-bottom: 13px;
+}
+
+.star-bar {
+  background-color: #fff;
+  width: 0;
+  height: 100%;
+  border-radius: 15px;
+  animation: progress 8s infinite linear;
+}
+
+@keyframes progress {
+  0% {
+    width: 100%;
+  }
+
+  25% {
+    width: 75%;
+  }
+
+  50% {
+    width: 50%;
+  }
+
+  75% {
+    width: 25%;
+  }
+
+  100% {
+    width: 0%;
+  }
+}
+
+#golem-health-bar {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 300px;
+  height: 15px;
+  background-color: red;
+}
+
+.display-block {
+  display: block;
+}
+
+.display-none {
+  display: none;
+}
+
+.display-flex {
+  display: flex;
+}
+
+#form {
+  position: absolute;
+  top: 250px;
+  left: 344px;
+  font-family: 'Courier New', Courier, monospace;
+  flex-direction: column;
+}
+
+#nameInput {
+  border: none;
+  border-bottom: 1px solid white;
+  background-color: transparent;
+  font-size: 40px;
+  color: white;
+  text-align: center;
+}
+
+#button {
+  border: none;
+  background-color: transparent;
+  font-size: 40px;
+  color: white;
+  margin-top: 60px;
+}
+
+#game-won {
+  position: absolute;
+  top: 200px;
+  left: 380px;
+  font-size: 100px;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+#game-lost {
+  position: absolute;
+  top: 200px;
+  left: 380px;
+  font-size: 100px;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+}
