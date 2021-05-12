@@ -1,11 +1,18 @@
-import updateHealthBar from '../src/components/sceneMain';
+import 'regenerator-runtime/runtime'; 
+import { looseHeart, addHeart } from '../src/components/sceneMain';
 
 describe('helper functions for main scene', () => {
   const hearts = 1;
-  const healthBar = document.getElementById('health-bar');
 
-  test('Adds hearts to health bar', () => {
-    updateHealthBar();
-    expect(healthBar).toContain('single-todo-item');
+  test('Adds heart to health bar', () => {
+    addHeart();
+    expect(hearts).toBe(2);
   });
+
+  test('Takes heart from health bar', () => {
+    looseHeart();
+    expect(hearts).toBe(0);
+  });
+
+
 });

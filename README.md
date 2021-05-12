@@ -6,23 +6,30 @@ A Jump 'n Run game built with Javascript's Phaser Framework! Fight your way thro
 <br>
 <br>
   
+![screenshot](./src/assets/png/screenshot3.png)
+<br>
+<p align="left">
+  <strong>PLAY</strong>: Takes you to a form. Input your name (or leave the field empty and play as "Anon"), press submit and start the game!
+<br>
+  <strong>LEADERBOARD</strong>: Takes you to the leaderboard showing you the top 10 players with the highest scores. Try to become a part of it!
+<p>
+
+
 ![screenshot](./src/assets/png/screenshot1.png)
 <br>
-
-![screenshot](./src/assets/png/screenshot2.png)
+<p align="left">
+  <strong>UP</strong>: Jump <br>
+  <strong>LEFT</strong>: Run left <br> 
+  <strong>RIGHT</strong>: Run right (you guessed it) <br>
+  <strong>SPACE</strong>: Shoot right <br>
+  <strong>A</strong>: Shoot left <br>
+<p>
+<br>
 
 ## Live Version
 https://agitated-curie-05b9b2.netlify.app/
 </div>
 <br>  
-
-## Controls
-
-  - UP: Jump
-  - LEFT: Run left 
-  - RIGHT: Run right (you guessed it) 
-  - SPACE: Shoot right
-  - A: Shoot left
 
 ## Content
 
