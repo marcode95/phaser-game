@@ -273,12 +273,12 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     showStatuses();
     timeCount = 0;
     setInterval(clock, 1000);
-    this.shot = this.sound.add('shot', { volume: 0.1 });
-    this.mainTheme = this.sound.add('mainTheme', { volume: 0.4 });
-    this.battleTheme = this.sound.add('battleTheme', { volume: 0.2 });
-    this.monster = this.sound.add('monster', { volume: 0.2 });
-    this.monsterDeath = this.sound.add('monsterDeath', { volume: 0.3 });
-    this.footsteps = this.sound.add('footsteps', { volume: 0.5 });
+    this.shot = this.sound.add('shot', { volume: 0.05 });
+    this.mainTheme = this.sound.add('mainTheme', { volume: 0.2 });
+    this.battleTheme = this.sound.add('battleTheme', { volume: 0.1 });
+    this.monster = this.sound.add('monster', { volume: 0.1 });
+    this.monsterDeath = this.sound.add('monsterDeath', { volume: 0.15 });
+    this.footsteps = this.sound.add('footsteps', { volume: 0.25 });
     this.mainTheme.play();
 
     this.add.image(600, 337.5, 'sky').setScrollFactor(0);
