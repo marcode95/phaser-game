@@ -22,7 +22,7 @@ module.exports = {
         type: 'asset/resource',
       },
       {
-        test: /\.(wav)$/i,
+        test: /\.(wav|mp3)$/i,
         use: 'file-loader',
       },
     ],

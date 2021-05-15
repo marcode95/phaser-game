@@ -52,6 +52,8 @@ import monster from '../assets/audio/monster.wav';
 import monsterDeath from '../assets/audio/monster-death.wav';
 import shot from '../assets/audio/shot.wav';
 import footsteps from '../assets/audio/footsteps.wav';
+import battleTheme from '../assets/audio/battle-theme.mp3';
+import mainTheme from '../assets/audio/main-theme.mp3';
 
 let gameOver = false;
 let player;
@@ -261,6 +263,8 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
 
     this.load.audio('monster', monster);
     this.load.audio('monsterDeath', monsterDeath);
+    this.load.audio('battleTheme', battleTheme);
+    this.load.audio('mainTheme', mainTheme);
     this.load.audio('footsteps', footsteps);
     this.load.audio('shot', shot);
   }
@@ -270,10 +274,12 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
     timeCount = 0;
     setInterval(clock, 1000);
     this.shot = this.sound.add('shot', { volume: 0.1 });
+    this.mainTheme = this.sound.add('mainTheme', { volume: 0.4 });
+    this.battleTheme = this.sound.add('battleTheme', { volume: 0.2 });
     this.monster = this.sound.add('monster', { volume: 0.2 });
     this.monsterDeath = this.sound.add('monsterDeath', { volume: 0.3 });
     this.footsteps = this.sound.add('footsteps', { volume: 0.5 });
-
+    this.mainTheme.play();
 
     this.add.image(600, 337.5, 'sky').setScrollFactor(0);
     createLoop(this, 9, 'trees4', 0.2);
@@ -730,6 +736,8 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
         updateHealthBar();
         heartSubtracted = true;
         this.monster.play();
+        this.mainTheme.stop();
+        this.battleTheme.play();
       }
     }
   }
