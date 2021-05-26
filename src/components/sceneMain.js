@@ -617,7 +617,7 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
         user: name,
         score,
       };
-      APIHandler.postData('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/cJOPOhMbh0xzmA7V3fdX/scores', object);
+      APIHandler.postData('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/gItM6Hzq8nx6aBQXukrl/scores', object);
       const gameLost = document.getElementById('game-lost');
       gameLost.classList.remove('display-none');
       gameLost.classList.add('display-block');
@@ -703,7 +703,7 @@ export default class SceneMain extends Phaser.Scene { // eslint-disable-line
           user: name,
           score,
         };
-        APIHandler.postData('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/cJOPOhMbh0xzmA7V3fdX/scores', object);
+        APIHandler.postData('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/gItM6Hzq8nx6aBQXukrl/scores', object);
         const gameWon = document.getElementById('game-won');
         gameWon.classList.remove('display-none');
         gameWon.classList.add('display-block');
