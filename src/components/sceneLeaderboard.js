@@ -6,7 +6,7 @@ export default class SceneLeaderboard extends Phaser.Scene { // eslint-disable-l
   }
 
   create() {
-    const url = 'https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/cJOPOhMbh0xzmA7V3fdX/scores';
+    const url = 'https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/gItM6Hzq8nx6aBQXukrl/scores';
 
     APIHandler.getData(url)
       .then((data) => {
